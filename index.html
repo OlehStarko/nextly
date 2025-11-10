@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nextly CRM — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/general.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <button class="sidebar__logo" aria-label="Nextly home" data-screen-target="dashboard">
+          <img src="images/icons/logo_icon.svg" alt="Nextly" />
+        </button>
+
+        <nav class="sidebar__nav">
+          <button
+            class="sidebar__nav-item is-active"
+            aria-label="Dashboard"
+            data-screen-target="dashboard"
+            type="button"
+          >
+            <img src="images/icons/home-2.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Clients">
+            <img src="images/icons/user-square.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Notes">
+            <img src="images/icons/note.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Calendar">
+            <img src="images/icons/calendar.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Payments">
+            <img src="images/icons/dollar-square.svg" alt="" />
+          </button>
+          <button
+            class="sidebar__nav-item"
+            aria-label="Settings"
+            data-screen-target="settings"
+            type="button"
+          >
+            <img src="images/icons/category.svg" alt="" />
+          </button>
+        </nav>
+
+        <div class="sidebar__profile">
+          <div class="sidebar__profile-avatar" aria-hidden="true">N</div>
+          <div class="sidebar__profile-indicator" aria-label="Online"></div>
+        </div>
+      </aside>
+
+      <button class="mobile-menu-toggle" aria-label="Open menu">
+        <img src="images/icons/menu.svg" alt="" />
+      </button>
+
+      <main class="content">
+        <div class="mobile-bar">
+          <button class="mobile-bar__button" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <button class="mobile-bar__button" aria-label="Open navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <section class="screen screen--dashboard is-active" data-screen="dashboard">
+          <header class="content__intro">
+            <h1>Dashboard</h1>
+          </header>
+
+          <section class="records-card" aria-label="List of records">
+            <div class="records-card__head">
+              <h2>List of records</h2>
+              <div class="filters">
+                <div class="pill-group" role="group" aria-label="Period">
+                  <button class="pill is-active" data-period="day">Day</button>
+                  <button class="pill" data-period="week">Week</button>
+                  <button class="pill" data-period="month">Month</button>
+                </div>
+                <button class="icon-button" aria-label="Open calendar">
+                  <img src="images/icons/calendar.svg" alt="" />
+                </button>
+              </div>
+            </div>
+
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th scope="col">Client</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Cost</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="sr-only">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="client">
+                      <div class="avatar" data-initial="A" aria-hidden="true"></div>
+                      <div>
+                        <strong>Anna</strong>
+                        <span>Returning client</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Manicure</td>
+                  <td>12:00</td>
+                  <td>500 ₴</td>
+                  <td><span class="status status--scheduled">Scheduled</span></td>
+                  <td>
+                    <button class="ghost-btn">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="client">
+                      <div class="avatar" data-initial="M" aria-hidden="true"></div>
+                      <div>
+                        <strong>Mark</strong>
+                        <span>Massage</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Massage</td>
+                  <td>14:00</td>
+                  <td>800 ₴</td>
+                  <td><span class="status status--done">Done</span></td>
+                  <td>
+                    <button class="ghost-btn">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="client">
+                      <div class="avatar" data-initial="S" aria-hidden="true"></div>
+                      <div>
+                        <strong>Sofia</strong>
+                        <span>Massage</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Massage</td>
+                  <td>15:00</td>
+                  <td>800 ₴</td>
+                  <td><span class="status status--canceled">Canceled</span></td>
+                  <td>
+                    <button class="ghost-btn">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <ul class="record-cards">
+              <li>
+                <article class="record-card">
+                  <div class="record-card__client">
+                    <div class="avatar" data-initial="A"></div>
+                    <div>
+                      <strong>Anna</strong>
+                      <span>Manicure</span>
+                    </div>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Time</dt>
+                      <dd>12:00</dd>
+                    </div>
+                    <div>
+                      <dt>Cost</dt>
+                      <dd>500 ₴</dd>
+                    </div>
+                  </dl>
+                  <div class="record-card__actions">
+                    <span class="status status--scheduled">Scheduled</span>
+                    <button class="ghost-btn">Edit</button>
+                  </div>
+                </article>
+              </li>
+              <li>
+                <article class="record-card">
+                  <div class="record-card__client">
+                    <div class="avatar" data-initial="M"></div>
+                    <div>
+                      <strong>Mark</strong>
+                      <span>Massage</span>
+                    </div>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Time</dt>
+                      <dd>14:00</dd>
+                    </div>
+                    <div>
+                      <dt>Cost</dt>
+                      <dd>800 ₴</dd>
+                    </div>
+                  </dl>
+                  <div class="record-card__actions">
+                    <span class="status status--done">Done</span>
+                    <button class="ghost-btn">Edit</button>
+                  </div>
+                </article>
+              </li>
+              <li>
+                <article class="record-card">
+                  <div class="record-card__client">
+                    <div class="avatar" data-initial="S"></div>
+                    <div>
+                      <strong>Sofia</strong>
+                      <span>Massage</span>
+                    </div>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Time</dt>
+                      <dd>15:00</dd>
+                    </div>
+                    <div>
+                      <dt>Cost</dt>
+                      <dd>800 ₴</dd>
+                    </div>
+                  </dl>
+                  <div class="record-card__actions">
+                    <span class="status status--canceled">Canceled</span>
+                    <button class="ghost-btn">Edit</button>
+                  </div>
+                </article>
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <section class="screen screen--settings" data-screen="settings" aria-label="Settings">
+          <header class="content__intro">
+            <h1>Settings</h1>
+            <p class="content__subtitle">
+              Керуйте своїм профілем та безпекою облікового запису.
+            </p>
+          </header>
+
+          <section class="settings-card">
+            <div class="settings-group">
+              <div class="settings-item">
+                <div>
+                  <strong>Обліковий запис</strong>
+                  <span>anna@nextly.com</span>
+                </div>
+                <button class="ghost-btn">Змінити</button>
+              </div>
+              <div class="settings-item">
+                <div>
+                  <strong>Сповіщення</strong>
+                  <span>Email + Push</span>
+                </div>
+                <button class="ghost-btn">Керувати</button>
+              </div>
+            </div>
+            <button class="logout-btn" type="button" id="logout-btn">
+              Вийти з аккаунта
+            </button>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="scripts/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nextly CRM — Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/auth.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero-header">
+        <div class="brand">
+          <div class="menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="brand-name">Nextly</span>
+        </div>
+      </header>
+
+      <main class="hero">
+        <section class="hero-screen hero-screen--welcome is-active" id="welcome">
+          <h1>Create an account or log in to continue</h1>
+          <div class="hero-actions">
+            <button class="btn primary" data-navigate="signup">Sign Up</button>
+            <button class="btn secondary" data-navigate="login">Log In</button>
+          </div>
+        </section>
+
+        <section class="hero-screen" id="login">
+          <h1>Log in to continue</h1>
+          <form class="auth-form auth-form--login" id="login-form">
+            <label class="field">
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <span>Password</span>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+              />
+            </label>
+
+            <div class="hero-actions">
+              <button class="btn primary" type="submit">Log In</button>
+              <button class="btn secondary" type="button" data-navigate="welcome">
+                Back
+              </button>
+            </div>
+            <p class="form-message" data-message="login"></p>
+          </form>
+        </section>
+
+        <section class="hero-screen hero-screen--wide" id="signup">
+          <h1>Create an account to continue</h1>
+          <form class="auth-form auth-form--grid" id="signup-form">
+            <div class="form-grid">
+              <label class="field">
+                <span>Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Phone number</span>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Password</span>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                  required
+                />
+              </label>
+            </div>
+            <div class="hero-actions hero-actions--full">
+              <button class="btn primary" type="submit">Create an account</button>
+              <button class="btn secondary" type="button" data-navigate="welcome">
+                Back
+              </button>
+            </div>
+            <p class="form-message" data-message="signup"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="scripts/auth.js"></script>
+  </body>
+</html>
