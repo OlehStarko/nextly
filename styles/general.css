@@ -309,19 +309,8 @@ button {
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: #fedbb2;
-  display: grid;
-  place-items: center;
-  font-weight: 600;
-  color: #1b1b1b;
-}
-
-.avatar[data-initial="M"] {
-  background: #c6e7ff;
-}
-
-.avatar[data-initial="S"] {
-  background: #d6d1ff;
+  object-fit: cover;
+  display: block;
 }
 
 .status {
@@ -454,6 +443,182 @@ button {
   gap: 12px;
 }
 
+.record-detail {
+  display: grid;
+  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 40px);
+  margin-bottom: 48px;
+  align-items: flex-start;
+}
+
+.record-detail__card {
+  background: #fff;
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 32px);
+  box-shadow: 0 30px 75px rgba(16, 19, 65, 0.08);
+}
+
+.record-user {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.record-user__media {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.record-user__avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 32px;
+  object-fit: cover;
+}
+
+.record-user__tag {
+  margin: 6px 0 0;
+  color: #8b8fa7;
+  font-size: 14px;
+}
+
+.record-user__details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.record-user__details li {
+  color: #1b1b1b;
+}
+
+.record-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.record-entry__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-entry__id {
+  font-size: 14px;
+  color: #8b8fa7;
+}
+
+.record-entry__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.record-entry__label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8b8fa7;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.record-entry__grid strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.record-entry__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.record-entry__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.ghost-btn--dark {
+  background: #1b1b1b;
+  color: #fff;
+  border: 1px solid #1b1b1b;
+}
+
+.record-form {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.record-form--visible {
+  display: flex;
+}
+
+.record-form--wide {
+  margin-top: 24px;
+  gap: 20px;
+}
+
+.record-form__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.record-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.record-form__field span {
+  font-weight: 500;
+}
+
+.record-form__field input {
+  border: 1px solid rgba(27, 27, 27, 0.15);
+  border-radius: 18px;
+  padding: 14px 18px;
+  font: inherit;
+  font-size: 15px;
+}
+
+.record-form__field select {
+  border: 1px solid rgba(27, 27, 27, 0.15);
+  border-radius: 18px;
+  padding: 14px 42px 14px 18px;
+  font: inherit;
+  font-size: 15px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 16 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l7 7 7-7' stroke='%231b1b1b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.record-form__submit {
+  width: 100%;
+  justify-content: center;
+  font-size: 15px;
+  padding: 14px 24px;
+}
+
+.record-form__submit--wide {
+  max-width: 320px;
+  align-self: flex-start;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -479,6 +644,14 @@ button {
 
   .settings-card {
     margin-bottom: 32px;
+  }
+
+  .record-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .record-entry__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -548,6 +721,19 @@ button {
   .record-cards {
     display: flex;
   }
+
+  .record-entry__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .record-entry__actions {
+    width: 100%;
+  }
+
+  .record-entry__actions .ghost-btn {
+    flex: 1;
+  }
 }
 
 @media (max-width: 520px) {
@@ -593,5 +779,19 @@ button {
 
   .pill {
     min-width: 80px;
+  }
+
+  .record-user__media {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .record-user__avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .record-entry__grid {
+    grid-template-columns: 1fr;
   }
 }

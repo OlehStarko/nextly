@@ -82,7 +82,18 @@ const initLogout = () => {
   });
 };
 
+const initRecordRedirects = () => {
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-record-id]");
+    if (!trigger) return;
+    const recordId = trigger.dataset.recordId;
+    if (!recordId) return;
+    window.location.href = `record.html?id=${recordId}`;
+  });
+};
+
 requireAuth();
 initPillToggles();
 initScreenNavigation();
 initLogout();
+initRecordRedirects();

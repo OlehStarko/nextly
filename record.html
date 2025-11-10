@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nextly CRM — Record details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/general.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <button class="sidebar__logo" aria-label="Nextly home" onclick="window.location.href='index.html'">
+          <img src="images/icons/logo_icon.svg" alt="Nextly" />
+        </button>
+
+        <nav class="sidebar__nav">
+          <button class="sidebar__nav-item" aria-label="Dashboard" onclick="window.location.href='index.html'" type="button">
+            <img src="images/icons/home-2.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Clients" type="button">
+            <img src="images/icons/user-square.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Notes" type="button">
+            <img src="images/icons/note.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Calendar" type="button">
+            <img src="images/icons/calendar.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item" aria-label="Payments" type="button">
+            <img src="images/icons/dollar-square.svg" alt="" />
+          </button>
+          <button class="sidebar__nav-item is-active" aria-label="Record" type="button">
+            <img src="images/icons/category.svg" alt="" />
+          </button>
+        </nav>
+
+        <div class="sidebar__profile">
+          <div class="sidebar__profile-avatar" aria-hidden="true">N</div>
+          <div class="sidebar__profile-indicator" aria-label="Online"></div>
+        </div>
+      </aside>
+
+      <button class="mobile-menu-toggle" aria-label="Open menu" type="button">
+        <img src="images/icons/menu.svg" alt="" />
+      </button>
+
+      <main class="content">
+        <div class="mobile-bar">
+          <button class="mobile-bar__button" aria-label="Open menu" type="button">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <button class="mobile-bar__button" aria-label="Open navigation" type="button">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <header class="content__intro record-detail__intro">
+          <h1>Record details</h1>
+          <p class="content__subtitle">
+            Оновіть дані клієнта та перегляньте статус поточного запису.
+          </p>
+        </header>
+
+        <section class="record-detail">
+          <article class="record-detail__card record-user" aria-label="User data">
+            <div class="record-user__media">
+              <img
+                class="record-user__avatar"
+                data-record-field="avatar"
+                src=""
+                alt=""
+              />
+              <div>
+                <h2 data-record-field="name">Client name</h2>
+                <p class="record-user__tag">Active client</p>
+              </div>
+            </div>
+            <ul class="record-user__details">
+              <li data-record-field="phone">—</li>
+              <li data-record-field="email">—</li>
+              <li data-record-field="birthday">—</li>
+            </ul>
+            <button class="ghost-btn" type="button" data-user-edit-toggle>
+              Edit
+            </button>
+
+            <form class="record-form" data-user-edit-form>
+              <label class="record-form__field">
+                <span>Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter new name"
+                  autocomplete="off"
+                  required
+                />
+              </label>
+              <label class="record-form__field">
+                <span>Phone number</span>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Enter new phone number"
+                  autocomplete="off"
+                  required
+                />
+              </label>
+              <label class="record-form__field">
+                <span>Date of birth</span>
+                <input
+                  type="text"
+                  name="birthday"
+                  placeholder="Enter new date of birth"
+                  autocomplete="off"
+                  required
+                />
+              </label>
+              <button class="ghost-btn ghost-btn--dark record-form__submit" type="submit">
+                Save
+              </button>
+            </form>
+          </article>
+
+          <article class="record-detail__card record-entry" aria-label="Record row">
+            <header class="record-entry__head">
+              <h2>Records</h2>
+              <span class="record-entry__id" data-record-field="id"></span>
+            </header>
+            <div class="record-entry__grid">
+              <div>
+                <span class="record-entry__label">Service</span>
+                <strong data-record-field="service">—</strong>
+              </div>
+              <div>
+                <span class="record-entry__label">Date</span>
+                <strong data-record-field="date">—</strong>
+              </div>
+              <div>
+                <span class="record-entry__label">Time</span>
+                <strong data-record-field="time">—</strong>
+              </div>
+              <div>
+                <span class="record-entry__label">Cost</span>
+                <strong data-record-field="cost">—</strong>
+              </div>
+            </div>
+            <div class="record-entry__footer">
+              <span class="status" data-record-field="status">Scheduled</span>
+              <div class="record-entry__actions">
+                <button class="ghost-btn ghost-btn--dark" type="button" data-action="history">
+                  History
+                </button>
+                <button class="ghost-btn" type="button" data-record-edit-toggle>
+                  Edit
+                </button>
+              </div>
+            </div>
+            <form class="record-form record-form--wide" data-record-edit-form>
+              <div class="record-form__grid">
+                <label class="record-form__field">
+                  <span>Service</span>
+                  <select name="service">
+                    <option value="Manicure">Manicure</option>
+                    <option value="Massage">Massage</option>
+                    <option value="Haircut">Haircut</option>
+                    <option value="Coloring">Coloring</option>
+                  </select>
+                </label>
+                <label class="record-form__field">
+                  <span>Date</span>
+                  <input
+                    type="text"
+                    name="date"
+                    placeholder="Enter new date"
+                    autocomplete="off"
+                    required
+                  />
+                </label>
+                <label class="record-form__field">
+                  <span>Time</span>
+                  <input
+                    type="text"
+                    name="time"
+                    placeholder="Enter new time"
+                    autocomplete="off"
+                    required
+                  />
+                </label>
+                <label class="record-form__field">
+                  <span>Cost</span>
+                  <input
+                    type="text"
+                    name="cost"
+                    placeholder="Enter new cost"
+                    autocomplete="off"
+                    required
+                  />
+                </label>
+                <label class="record-form__field">
+                  <span>Status</span>
+                  <select name="status">
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Done">Done</option>
+                    <option value="Canceled">Canceled</option>
+                  </select>
+                </label>
+              </div>
+              <button
+                class="ghost-btn ghost-btn--dark record-form__submit record-form__submit--wide"
+                type="submit"
+              >
+                Save
+              </button>
+            </form>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="scripts/record.js"></script>
+  </body>
+</html>
