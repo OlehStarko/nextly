@@ -15,7 +15,11 @@
   <body>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Primary navigation">
-        <button class="sidebar__logo" aria-label="Nextly home" onclick="window.location.href='index.html'">
+        <button
+          class="sidebar__logo sidebar__logo--desktop"
+          aria-label="Nextly home"
+          onclick="window.location.href='index.html'"
+        >
           <img src="images/icons/logo_icon.svg" alt="Nextly" />
         </button>
 
@@ -48,6 +52,14 @@
 
       <button class="mobile-menu-toggle" aria-label="Open menu" type="button">
         <img src="images/icons/menu.svg" alt="" />
+      </button>
+
+      <button
+        class="sidebar__logo sidebar__logo--mobile"
+        aria-label="Nextly home"
+        onclick="window.location.href='index.html'"
+      >
+        <img src="images/icons/logo_icon.svg" alt="Nextly" />
       </button>
 
       <main class="content">

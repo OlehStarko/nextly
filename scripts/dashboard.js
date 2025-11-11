@@ -33,13 +33,13 @@ const initScreenNavigation = () => {
   const screens = document.querySelectorAll("[data-screen]");
   const screenButtons = document.querySelectorAll("[data-screen-target]");
   const sidebar = document.querySelector(".sidebar");
+  const mobileToggle = document.querySelector(".mobile-menu-toggle");
 
   const toggleSidebar = (shouldOpen) => {
     if (!sidebar) return;
     sidebar.classList.toggle("is-open", shouldOpen);
   };
 
-  const mobileToggle = document.querySelector(".mobile-menu-toggle");
   mobileToggle?.addEventListener("click", () => {
     toggleSidebar(!sidebar?.classList.contains("is-open"));
   });
