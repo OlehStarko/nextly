@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>Nextly CRM — Log in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles/general.css">
+</head>
+<body>
+  <noscript>Для роботи додатку потрібен JavaScript.</noscript>
+  <div class="app-shell">
+    <header class="nav" aria-label="Nextly">
+      <a class="nav__logo" href="index.html" aria-label="Nextly home">
+        <img src="images/icons/logo_icon.svg" alt="">
+      </a>
+      <span>Nextly</span>
+    </header>
+
+    <main class="hero">
+      <h1 class="hero__title">Log in to continue</h1>
+      <form class="form form--stack" id="loginForm" data-auth="login" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input class="input" id="login-email" name="email" type="email" placeholder="Enter your email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input class="input" id="login-password" name="password" type="password" placeholder="Enter password" required>
+        </div>
+        <p class="form__helper">
+          <button class="link-button" type="button" data-reset-password>Забули пароль?</button>
+        </p>
+        <p class="form__message" data-auth-message></p>
+      </form>
+      <div class="actions" role="group">
+        <button class="btn btn--primary" type="submit" form="loginForm">Log in</button>
+      </div>
+    </main>
+  </div>
+
+  <script defer src="scripts/app.js"></script>
+  <script type="module" src="scripts/auth.js"></script>
+</body>
+</html>

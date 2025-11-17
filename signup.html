@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>Nextly CRM — Sign up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles/general.css">
+</head>
+<body>
+  <noscript>Для роботи додатку потрібен JavaScript.</noscript>
+  <div class="app-shell">
+    <header class="nav" aria-label="Nextly">
+      <a class="nav__logo" href="index.html" aria-label="Nextly home">
+        <img src="images/icons/logo_icon.svg" alt="">
+      </a>
+      <span>Nextly</span>
+    </header>
+
+    <main class="hero hero--login">
+      <h1 class="hero__title">Створити акаунт</h1>
+      <form class="form form--stack" id="signupForm" data-auth="signup" novalidate>
+        <div class="field">
+          <label for="signup-name">Ім'я</label>
+          <input class="input" id="signup-name" name="name" type="text" placeholder="Введіть своє ім'я" required>
+        </div>
+        <div class="field">
+          <label for="signup-phone">Номер телефону</label>
+          <div class="phone-control" data-phone>
+            <button class="phone-control__current" type="button" data-phone-toggle>
+              <span data-phone-flag role="img" aria-label="country">🇺🇦</span>
+              <span data-phone-dial>+380</span>
+              <span class="phone-control__caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="phone-control__dropdown" data-phone-list hidden></div>
+            <input class="input phone-control__input" id="signup-phone" name="phone" type="tel" placeholder="Введіть свій номер телефону" autocomplete="tel" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input class="input" id="signup-email" name="email" type="email" placeholder="Введіть свій email" required>
+        </div>
+        <div class="field">
+          <label for="signup-password">Пароль</label>
+          <input class="input" id="signup-password" name="password" type="password" placeholder="Введіть свій пароль" required>
+        </div>
+        <p class="form__message" data-auth-message></p>
+      </form>
+      <div class="actions" role="group">
+        <button class="btn btn--primary" type="submit" form="signupForm">Зареєструватись</button>
+        <button class="btn btn--google" type="button" data-google-signin>
+          <img class="btn__icon" src="images/icons/google.svg" alt="" aria-hidden="true">
+          Continue with Google
+        </button>
+        <p class="form__message hero__message" data-google-message aria-live="polite"></p>
+      </div>
+    </main>
+  </div>
+
+  <script defer src="scripts/app.js"></script>
+  <script type="module" src="scripts/auth.js"></script>
+  <script type="module" src="scripts/google-auth.js"></script>
+</body>
+</html>

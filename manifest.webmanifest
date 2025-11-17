@@ -1,0 +1,15 @@
+{
+  "name": "Nextly CRM",
+  "short_name": "Nextly",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f2f0f4",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "images/icons/logo_icon.svg",
+      "sizes": "48x48",
+      "type": "image/svg+xml"
+    }
+  ]
+}
