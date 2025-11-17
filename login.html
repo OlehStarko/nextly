@@ -30,7 +30,12 @@
         </div>
         <div class="field">
           <label for="login-password">Password</label>
-          <input class="input" id="login-password" name="password" type="password" placeholder="Enter password" required>
+          <div class="input-wrap">
+            <input class="input" id="login-password" name="password" type="password" placeholder="Enter password" required>
+            <button class="password-toggle" type="button" data-password-toggle="login-password" aria-label="Show password">
+              <img src="images/icons/show.svg" alt="" aria-hidden="true" data-password-icon>
+            </button>
+          </div>
         </div>
         <p class="form__helper">
           <button class="link-button" type="button" data-reset-password>Забули пароль?</button>

@@ -33,8 +33,9 @@
           <div class="phone-control" data-phone>
             <button class="phone-control__current" type="button" data-phone-toggle>
               <span data-phone-flag role="img" aria-label="country">🇺🇦</span>
-              <span data-phone-dial>+380</span>
               <span class="phone-control__caret" aria-hidden="true">▾</span>
+              <span data-phone-dial>+380</span>
+              
             </button>
             <div class="phone-control__dropdown" data-phone-list hidden></div>
             <input class="input phone-control__input" id="signup-phone" name="phone" type="tel" placeholder="Введіть свій номер телефону" autocomplete="tel" required>
@@ -46,7 +47,12 @@
         </div>
         <div class="field">
           <label for="signup-password">Пароль</label>
-          <input class="input" id="signup-password" name="password" type="password" placeholder="Введіть свій пароль" required>
+          <div class="input-wrap">
+            <input class="input" id="signup-password" name="password" type="password" placeholder="Введіть свій пароль" required>
+            <button class="password-toggle" type="button" data-password-toggle="signup-password" aria-label="Показати пароль">
+              <img src="images/icons/show.svg" alt="" aria-hidden="true" data-password-icon>
+            </button>
+          </div>
         </div>
         <p class="form__message" data-auth-message></p>
       </form>

@@ -164,6 +164,12 @@ body::after {
   max-width: 100%;
 }
 
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .field label {
   font-size: 10px;
   font-weight: 600;
@@ -280,6 +286,28 @@ body::after {
   transition: border-color 150ms ease, box-shadow 150ms ease;
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid #1b1b1b;
+  outline-offset: 2px;
+}
+
+.password-toggle img {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .input::placeholder {
