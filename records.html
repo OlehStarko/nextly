@@ -19,11 +19,97 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Records</h1>
-      <p>Порожня сторінка записів. Тут буде контент.</p>
+      <div class="records__header">
+        <div class="records__base">
+          <p class="records__label">Базова дата</p>
+          <input class="input records__date" id="baseDate" type="date">
+        </div>
+        <div class="records__filters-block">
+          <div class="records__ranges" role="group" aria-label="Діапазон дат">
+            <button class="btn btn--light records__range-btn records__range-btn--active" data-range="all">Усі</button>
+            <button class="btn btn--light records__range-btn" data-range="today">Сьогодні</button>
+            <button class="btn btn--light records__range-btn" data-range="week">Тиждень</button>
+            <button class="btn btn--light records__range-btn" data-range="month">Місяць</button>
+          </div>
+          <div class="records__statuses" role="group" aria-label="Статуси">
+            <button class="records__status records__status--active" data-status="planned">Заплановано</button>
+            <button class="records__status records__status--active" data-status="done">Виконано</button>
+            <button class="records__status records__status--active" data-status="canceled">Скасовано</button>
+          </div>
+          <div class="records__filters">
+            <label class="records__label" for="recordsClientFilter">Клієнт</label>
+            <select class="input records__select" id="recordsClientFilter">
+              <option value="all">Усі клієнти</option>
+            </select>
+            <button class="btn btn--primary records__add" type="button" id="addRecordToggle">+ Новий запис</button>
+          </div>
+        </div>
+      </div>
+
+      <form class="records__form" id="recordForm" hidden>
+        <div class="records__form-grid">
+          <div class="field">
+            <label for="record-client">Клієнт</label>
+            <select class="input records__select" id="record-client" required></select>
+          </div>
+          <div class="field">
+            <label for="record-master">Майстер</label>
+            <select class="input records__select" id="record-master">
+              <option value="">— Без майстра —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="record-service">Послуга</label>
+            <select class="input records__select" id="record-service">
+              <option value="">— Виберіть —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="record-date">Дата</label>
+            <input class="input" id="record-date" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="record-time">Час</label>
+            <input class="input" id="record-time" name="time" type="time" required>
+          </div>
+          <div class="field">
+            <label for="record-amount">Ціна, ₴</label>
+            <input class="input" id="record-amount" name="amount" type="number" min="0" step="0.01" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="record-status">Статус</label>
+            <select class="input records__select" id="record-status" required>
+              <option value="planned">Заплановано</option>
+              <option value="done">Виконано</option>
+              <option value="canceled">Скасовано</option>
+            </select>
+          </div>
+        </div>
+        <div class="records__form-row records__form-row--note">
+          <label class="records__label" for="record-note">Оплачено</label>
+          <label class="switch">
+            <input type="checkbox" id="record-paid">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="records__form-actions">
+          <button class="btn btn--ghost" type="button" id="cancelRecord">Скасувати</button>
+          <button class="btn btn--primary" type="submit">Зберегти</button>
+        </div>
+        <p class="records__form-message" data-record-message></p>
+      </form>
+
+      <div class="records__stats" id="recordsStats">
+        <span class="records__chip" data-count>Записів: 0</span>
+        <span class="records__chip" data-sum>Сума: 0 ₴</span>
+        <span class="records__chip" data-period>Період: —</span>
+      </div>
+
+      <div class="records__list" id="recordsList" aria-live="polite"></div>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/records.js"></script>
 </body>
 </html>

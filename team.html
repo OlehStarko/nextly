@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>Nextly CRM — Team</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles/general.css">
+  <link rel="stylesheet" href="styles/dashboard.css">
+  <link rel="stylesheet" href="styles/team.css">
+</head>
+<body data-page="team">
+  <noscript>Для роботи додатку потрібен JavaScript.</noscript>
+  <div class="app-shell app-shell--dashboard">
+    <div id="sidebar-root"></div>
+
+    <main class="hero">
+      <div class="team__topbar">
+        <h1 class="hero__title">Команда</h1>
+        <button class="btn btn--primary" type="button" id="addTeamToggle">+ Додати майстра</button>
+      </div>
+
+      <form class="team__form" id="teamForm" hidden>
+        <div class="team__form-row">
+          <label class="team__label" for="team-name">Ім'я</label>
+          <input class="input" id="team-name" name="name" type="text" placeholder="Введіть ім'я" required>
+        </div>
+        <div class="team__form-row">
+          <label class="team__label" for="team-role">Спеціалізація</label>
+          <input class="input" id="team-role" name="role" type="text" placeholder="Напр., Барбер" required>
+        </div>
+        <div class="team__form-row">
+          <label class="team__label" for="team-phone">Телефон</label>
+          <input class="input" id="team-phone" name="phone" type="tel" placeholder="+380..." required>
+        </div>
+        <div class="team__form-row">
+          <label class="team__label" for="team-exp">Стаж, років</label>
+          <input class="input" id="team-exp" name="exp" type="number" min="0" step="1" placeholder="0">
+        </div>
+        <div class="team__form-row team__form-row--toggle">
+          <label class="team__label" for="team-active">Активний (доступний для запису)</label>
+          <label class="switch">
+            <input type="checkbox" id="team-active" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="team__form-actions">
+          <button class="btn btn--primary" type="submit">Зберегти</button>
+          <button class="btn btn--ghost" type="button" id="cancelTeam">Скасувати</button>
+        </div>
+        <p class="team__message" data-team-message></p>
+      </form>
+
+      <div class="team__toolbar">
+        <input class="input team__search" id="teamSearch" type="search" placeholder="Пошук майстрів...">
+      </div>
+
+      <div class="team__list" id="teamList" aria-live="polite"></div>
+    </main>
+  </div>
+  <script defer src="scripts/app.js"></script>
+  <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/team.js"></script>
+</body>
+</html>

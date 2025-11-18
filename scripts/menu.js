@@ -2,11 +2,38 @@ const MENU_ITEMS = [
   { slug: "dashboard", label: "Dashboard", icon: "images/icons/dashboards.svg", href: "dashboard.html" },
   { slug: "clients", label: "Clients", icon: "images/icons/clients.svg", href: "clients.html" },
   { slug: "records", label: "Records", icon: "images/icons/records.svg", href: "records.html" },
+  { slug: "team", label: "Team", icon: "images/icons/team.svg", href: "team.html" },
   { slug: "shop", label: "Shop", icon: "images/icons/shop.svg", href: "shop.html" },
   { slug: "services", label: "Services", icon: "images/icons/services.svg", href: "services.html" },
   { slug: "finances", label: "Finances", icon: "images/icons/finances.svg", href: "finances.html" },
   { slug: "settings", label: "Settings", icon: "images/icons/settings.svg", href: "settings.html" },
 ];
+
+const dispatchPageReady = (page) => {
+  document.dispatchEvent(new CustomEvent("page:ready", { detail: { page } }));
+};
+
+const loadedPages = new Set();
+const ensurePageModule = async (page) => {
+  if (!page || loadedPages.has(page)) return;
+  const loaders = {
+    dashboard: () => import("./dashboard.js"),
+    clients: () => import("./clients.js"),
+    records: () => import("./records.js"),
+    shop: () => import("./shop.js"),
+    services: () => import("./services.js"),
+    team: () => import("./team.js"),
+    finances: () => import("./finances.js"),
+  };
+  const loader = loaders[page];
+  if (!loader) return;
+  try {
+    await loader();
+    loadedPages.add(page);
+  } catch (e) {
+    console.warn("Не вдалося завантажити модуль сторінки:", page, e);
+  }
+};
 
 const renderSidebar = (activeSlug) => {
   const root = document.getElementById("sidebar-root");
@@ -70,12 +97,12 @@ const initSpaNav = () => {
     }
   };
 
-  const replaceMain = (doc) => {
-    const currentMain = document.querySelector(".hero");
-    const incomingMain = doc.querySelector(".hero");
-    if (currentMain && incomingMain) {
-      currentMain.replaceWith(incomingMain);
-    }
+const replaceMain = (doc) => {
+  const currentMain = document.querySelector(".hero");
+  const incomingMain = doc.querySelector(".hero");
+  if (currentMain && incomingMain) {
+    currentMain.replaceWith(incomingMain);
+  }
   };
 
   const navigateTo = async (href, push = true) => {
@@ -88,9 +115,13 @@ const initSpaNav = () => {
       syncStylesheets(doc);
       replaceMain(doc);
       document.title = doc.title;
+      const page = doc.body?.dataset?.page;
+      if (page) document.body.dataset.page = page;
       const path = new URL(href, window.location.href).pathname;
       if (push) history.pushState({ path }, "", path);
       setActive(path);
+      await ensurePageModule(page);
+      dispatchPageReady(page);
     } catch (e) {
       window.location.href = href;
     }
@@ -114,8 +145,10 @@ const initSpaNav = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const activeSlug = document.body.dataset.page;
   renderSidebar(activeSlug);
   initSpaNav();
+  await ensurePageModule(activeSlug);
+  dispatchPageReady(activeSlug);
 });

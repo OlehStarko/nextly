@@ -1,1 +1,261 @@
-/* Page-specific overrides for records (empty for now) */
+.hero {
+  align-items: stretch;
+  gap: 24px;
+}
+
+.records__header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+.records__label {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.records__base {
+  display: grid;
+  gap: 8px;
+}
+
+.records__date {
+  max-width: 320px;
+}
+
+.records__ranges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.records__range-btn {
+  border-radius: 16px;
+  height: 40px;
+  padding: 0 16px;
+  box-shadow: none;
+}
+
+.records__range-btn--active {
+  background: #1b1b1b;
+  color: #fff;
+  border-color: #1b1b1b;
+}
+
+.records__statuses {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.records__status {
+  border: none;
+  background: #fff;
+  border-radius: 18px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.records__status--active {
+  background: #e0e7ff;
+}
+
+.records__filters {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.records__select {
+  min-width: 220px;
+}
+
+.records__add {
+  white-space: nowrap;
+}
+
+.records__form {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.records__form-row {
+  display: grid;
+  gap: 6px;
+}
+
+.records__form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 16px;
+}
+
+.records__textarea {
+  resize: vertical;
+}
+
+.records__form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.records__form-message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.records__form-message--error {
+  color: #dc2626;
+}
+
+.records__form-message--success {
+  color: #15803d;
+}
+
+.records__stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.records__chip {
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.records__list {
+  display: grid;
+  gap: 16px;
+}
+
+.records__card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  align-items: center;
+}
+
+.records__card-info h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.records__badge {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.records__badge--planned {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.records__badge--done {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.records__badge--canceled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.records__phone {
+  margin: 6px 0;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.records__meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.records__note {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.records__card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.records__empty {
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.btn--danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.btn--light {
+  background: #fff;
+  border-color: #e5e7eb;
+  color: #111827;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+  .records__filters {
+    grid-template-columns: 1fr;
+  }
+
+  .records__add {
+    width: 100%;
+  }
+
+  .records__card {
+    grid-template-columns: 1fr;
+  }
+
+  .records__card-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .records__ranges,
+  .records__statuses {
+    width: 100%;
+  }
+
+  .records__select,
+  .records__date {
+    width: 100%;
+  }
+
+  .records__card-actions .btn {
+    width: 100%;
+  }
+}

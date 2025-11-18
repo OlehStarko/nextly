@@ -18,11 +18,22 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Dashboard</h1>
-      <p>Тут скоро зʼявиться основна CRM. Поки що це placeholder.</p>
+      <div class="dashboard__header">
+        <h1 class="hero__title">Dashboard</h1>
+        <p class="hero__subtitle">Швидкий огляд останніх записів</p>
+      </div>
+
+      <section class="dash-records">
+        <div class="dash-records__stats">
+          <div class="dash-records__chip" data-dash-count>Записів: 0</div>
+          <div class="dash-records__chip" data-dash-sum>Сума: 0 ₴</div>
+        </div>
+        <div class="dash-records__list" id="dashRecordsList" aria-live="polite"></div>
+      </section>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/dashboard.js"></script>
 </body>
 </html>

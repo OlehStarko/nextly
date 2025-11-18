@@ -19,11 +19,40 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Clients</h1>
-      <p>Порожня сторінка клієнтів. Тут буде контент.</p>
+      <div class="clients__topbar">
+        <h1 class="hero__title">Клієнти</h1>
+        <button class="btn btn--primary" type="button" id="addClientToggle">+ Додати клієнта</button>
+      </div>
+
+      <form class="clients__form" id="clientForm" hidden>
+        <div class="clients__form-row">
+          <label class="clients__label" for="client-name">Ім'я</label>
+          <input class="input" id="client-name" name="name" type="text" placeholder="Введіть ім'я" required>
+        </div>
+        <div class="clients__form-row">
+          <label class="clients__label" for="client-phone">Телефон</label>
+          <input class="input" id="client-phone" name="phone" type="tel" placeholder="+380..." required>
+        </div>
+        <div class="clients__form-row">
+          <label class="clients__label" for="client-age">Вік</label>
+          <input class="input" id="client-age" name="age" type="number" min="1" max="120" placeholder="Наприклад, 30">
+        </div>
+        <div class="clients__form-actions">
+          <button class="btn btn--primary" type="submit">Зберегти</button>
+          <button class="btn btn--ghost" type="button" id="cancelClientEdit">Скасувати</button>
+        </div>
+        <p class="clients__form-message" data-form-message></p>
+      </form>
+
+      <div class="clients__toolbar">
+        <input class="input clients__search" id="clientsSearch" type="search" placeholder="Пошук по імені або телефону">
+      </div>
+
+      <div class="clients__list" id="clientsList" aria-live="polite"></div>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/clients.js"></script>
 </body>
 </html>

@@ -1,0 +1,151 @@
+.hero {
+  align-items: stretch;
+  gap: 24px;
+}
+
+.team__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.team__form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+}
+
+.team__form-row {
+  display: grid;
+  gap: 6px;
+}
+
+.team__form-row--toggle {
+  align-items: center;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+.team__label {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+}
+
+.team__form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.team__message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.team__message--error {
+  color: #dc2626;
+}
+
+.team__message--success {
+  color: #15803d;
+}
+
+.team__toolbar {
+  display: flex;
+  gap: 12px;
+}
+
+.team__search {
+  flex: 1;
+}
+
+.team__list {
+  display: grid;
+  gap: 16px;
+}
+
+.team__card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.team__info {
+  display: grid;
+  gap: 6px;
+}
+
+.team__name {
+  margin: 0;
+  font-size: 20px;
+}
+
+.team__meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.team__badge {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.team__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn--danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.btn--light {
+  background: #fff;
+  border-color: #e5e7eb;
+  color: #111827;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+  .team__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .team__actions {
+    justify-content: flex-start;
+  }
+
+  .team__form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 600px) {
+  .team__actions .btn {
+    width: 100%;
+  }
+}

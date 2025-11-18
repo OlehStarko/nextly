@@ -1,1 +1,163 @@
-/* Page-specific overrides for shop (empty for now) */
+.hero {
+  align-items: stretch;
+  gap: 24px;
+}
+
+.shop__header {
+  display: grid;
+  align-items: start;
+  gap: 6px;
+}
+
+.hero__subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.shop__badge {
+  align-self: start;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.shop__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.shop__card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+  display: grid;
+  gap: 12px;
+}
+
+.shop__card-title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.shop__form {
+  display: grid;
+  gap: 10px;
+}
+
+.shop__label {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+}
+
+.shop__select {
+  width: 100%;
+}
+
+.shop__form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.shop__submit {
+  width: 100%;
+}
+
+.shop__message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.shop__message--error {
+  color: #dc2626;
+}
+
+.shop__message--success {
+  color: #15803d;
+}
+
+.shop__table-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.shop__table-head,
+.shop__row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.shop__table-head {
+  font-weight: 700;
+  color: #111827;
+  font-size: 14px;
+}
+
+.shop__row {
+  padding: 10px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.shop__row-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.shop__empty {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  padding: 12px 0;
+}
+
+@media (max-width: 900px) {
+  .shop__table-head,
+  .shop__row {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-areas:
+      "name price sold"
+      "revenue revenue actions";
+    row-gap: 8px;
+  }
+
+  .shop__table-head span:nth-child(1),
+  .shop__row span:nth-child(1) { grid-area: name; }
+  .shop__table-head span:nth-child(2),
+  .shop__row span:nth-child(2) { grid-area: price; }
+  .shop__table-head span:nth-child(3),
+  .shop__row span:nth-child(3) { grid-area: sold; }
+  .shop__table-head span:nth-child(4),
+  .shop__row span:nth-child(4) { grid-area: revenue; }
+  .shop__table-head span:nth-child(5),
+  .shop__row .shop__row-actions { grid-area: actions; justify-content: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .shop__submit {
+    width: 100%;
+  }
+
+  .shop__row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "name name"
+      "price sold"
+      "revenue actions";
+  }
+}

@@ -19,11 +19,80 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Finances</h1>
-      <p>Порожня сторінка фінансів. Тут буде контент.</p>
+      <header class="fin__header">
+        <div>
+          <h1 class="hero__title">Фінанси</h1>
+          <p class="hero__subtitle">Огляд доходів та записів за період</p>
+        </div>
+        <div class="fin__filters">
+          <select class="input fin__select" id="fin-period">
+            <option value="today">Сьогодні</option>
+            <option value="yesterday">Вчора</option>
+            <option value="this_week" selected>Цього тижня</option>
+            <option value="this_month">Цього місяця</option>
+            <option value="last_month">Минулий місяць</option>
+            <option value="custom">Custom range</option>
+          </select>
+          <input class="input fin__date" id="fin-from" type="date" hidden>
+          <input class="input fin__date" id="fin-to" type="date" hidden>
+          <select class="input fin__select" id="fin-master">
+            <option value="">Усі майстри</option>
+          </select>
+          <select class="input fin__select" id="fin-service">
+            <option value="">Усі послуги</option>
+          </select>
+          <button class="btn btn--primary" type="button" id="fin-apply">Оновити</button>
+        </div>
+      </header>
+
+      <section class="fin__cards" id="fin-kpi"></section>
+
+      <section class="fin__block">
+        <div class="fin__block-head">
+          <h2>Дохід за дні</h2>
+          <button class="btn btn--ghost" type="button" data-export="revenue-day">Export CSV</button>
+        </div>
+        <div class="fin__chart" id="fin-chart"></div>
+        <div class="fin__table" id="fin-revenue-day"></div>
+      </section>
+
+      <section class="fin__grid">
+        <div class="fin__block">
+          <div class="fin__block-head">
+            <h3>По майстрах</h3>
+            <button class="btn btn--ghost" type="button" data-export="revenue-master">Export CSV</button>
+          </div>
+          <div class="fin__table" id="fin-revenue-master"></div>
+        </div>
+        <div class="fin__block">
+          <div class="fin__block-head">
+            <h3>По послугах</h3>
+            <button class="btn btn--ghost" type="button" data-export="revenue-service">Export CSV</button>
+          </div>
+          <div class="fin__table" id="fin-revenue-service"></div>
+        </div>
+      </section>
+
+      <section class="fin__block">
+        <div class="fin__block-head">
+          <h3>Записи</h3>
+          <button class="btn btn--ghost" type="button" data-export="appointments">Export CSV</button>
+        </div>
+        <div class="fin__table" id="fin-appointments"></div>
+      </section>
+
+      <section class="fin__block">
+        <div class="fin__block-head">
+          <h3>Клієнти</h3>
+          <button class="btn btn--ghost" type="button" data-export="clients">Export CSV</button>
+        </div>
+        <div class="fin__table" id="fin-clients"></div>
+      </section>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/reports.js"></script>
+  <script type="module" src="scripts/finances.js"></script>
 </body>
 </html>
