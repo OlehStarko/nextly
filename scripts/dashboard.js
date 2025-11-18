@@ -28,6 +28,7 @@ const seedRecords = () => {
     { id: "r2", clientId: "c2", serviceId: "s2", masterId: "m1", date: today, time: "13:00", amount: 500, status: "planned" },
     { id: "r3", clientId: "c3", serviceId: "s3", masterId: "m1", date: today, time: "15:00", amount: 4000, status: "planned" },
     { id: "r4", clientId: "c4", serviceId: "s4", masterId: "m1", date: today, time: "17:00", amount: 700, status: "done" },
+    { id: "r5", clientId: "c1", serviceId: "s1", masterId: "m1", date: today, time: "18:30", amount: 500, status: "planned" },
   ];
 };
 
@@ -132,6 +133,13 @@ const renderDashboardRecords = () => {
     if (!daysRow) return;
     const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
     const from = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+
+    const countsByDay = new Map();
+    records.forEach((r) => {
+      countsByDay.set(r.date, (countsByDay.get(r.date) || 0) + 1);
+    });
+
+    const todayDate = atStartOfDay(new Date(todayIso()));
     const items = [];
     for (let i = 0; i < daysInMonth; i++) {
       const d = new Date(from);
@@ -143,6 +151,8 @@ const renderDashboardRecords = () => {
         day: d.getDate(),
         isActive: key === selectedDate,
         isToday: key === todayIso(),
+        isPast: d < todayDate,
+        count: countsByDay.get(key) || 0,
       });
     }
     daysRow.innerHTML = items
@@ -150,6 +160,11 @@ const renderDashboardRecords = () => {
         (d) => `<button class="dash__day ${d.isActive ? "dash__day--active" : ""} ${d.isToday ? "dash__day--today" : ""}" data-day="${d.iso}">
           <span>${d.dow}</span>
           <strong>${d.day}</strong>
+          ${
+            d.count
+              ? `<span class="dash__day-count ${d.isPast ? "dash__day-count--past" : "dash__day-count--future"}">${d.count}</span>`
+              : ""
+          }
         </button>`
       )
       .join("");
@@ -249,19 +264,18 @@ const renderDashboardRecords = () => {
       const amount = (Number(rec.amount) || 0).toFixed(2);
       return `
         <article class="dash-records__card">
-          <div class="dash-records__left">
-            <div class="dash-records__head">
-              <div>
-                <h3>${name}</h3>
-                ${phone}
-                <p class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
-              </div>
-              <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+          <div class="dash-records__head">
+            <div>
+              <h3>${name}</h3>
+              <p class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
             </div>
           </div>
+          <div class="dash-records__service">${serviceName}</div>
+          <div class="dash-records__phone">${client?.phone || ""}</div>
+          <div class="dash-records__time">🕒 ${rec.time || "--:--"}</div>
           <div class="dash-records__meta">
-            <span class="dash-records__chip">🕒 ${rec.time || "--:--"}</span>
-            <span class="dash-records__chip">₴ ${amount}</span>
+            <span class="dash-records__price">₴ ${amount}</span>
+            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
           </div>
         </article>
       `;

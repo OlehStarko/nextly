@@ -20,37 +20,27 @@
     <main class="hero hero--dash">
       <header class="dash__header">
         <div class="dash__title">
-          <div class="dash__crumb">Листопад 2025 р.</div>
           <h1 class="hero__title" data-dash-date>11 листопада 2025</h1>
+          <div class="dash__crumb-row">
+            <span class="dash__crumb">Листопад 2025 р.</span>
+          </div>
           <p class="hero__subtitle">Огляд записів за вибраний день</p>
         </div>
         <div class="dash__controls">
-          <button class="btn btn--ghost dash__icon" type="button" aria-label="Меню">☰</button>
           <button class="btn btn--ghost dash__chip" type="button" data-dash-range="today">Сьогодні</button>
           <div class="dash__toggle">
-            <button class="dash__toggle-btn is-active" type="button" data-view="list">📋</button>
-            <button class="dash__toggle-btn" type="button" data-view="grid">🔲</button>
+            <button class="dash__toggle-btn is-active" type="button" data-view="list">🕒</button>
+            <button class="dash__toggle-btn" type="button" data-view="grid">⬜</button>
           </div>
-          <input class="input dash__date" type="date" id="dashDate">
           <button class="btn btn--ghost dash__icon" type="button" aria-label="Пошук">🔍</button>
+          <button class="btn btn--ghost dash__chip" type="button">День ▾</button>
         </div>
       </header>
 
       <section class="dash__calendar-wrap">
-        <button class="dash__nav" type="button" id="dashPrev">‹</button>
+        <button class="dash__nav" id="dashPrev" aria-label="Попередній місяць">‹</button>
         <div class="dash__calendar" id="dashDays"></div>
-        <button class="dash__nav" type="button" id="dashNext">›</button>
-      </section>
-
-      <section class="dash__kpi">
-        <div class="dash__kpi-card">
-          <p class="dash__kpi-label">Записів</p>
-          <p class="dash__kpi-value" data-dash-count>0</p>
-        </div>
-        <div class="dash__kpi-card">
-          <p class="dash__kpi-label">Сума</p>
-          <p class="dash__kpi-value" data-dash-sum>0 ₴</p>
-        </div>
+        <button class="dash__nav" id="dashNext" aria-label="Наступний місяць">›</button>
       </section>
 
       <button class="dash__showmore" type="button" id="dashShowMore">Показати більше</button>
