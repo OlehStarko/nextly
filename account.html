@@ -19,11 +19,158 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Account</h1>
-      <p>Порожня сторінка акаунта. Тут буде профіль.</p>
+      <div class="account__header">
+        <h1 class="hero__title">Профіль</h1>
+        <p class="hero__subtitle">Керуйте особистою інформацією та безпекою</p>
+      </div>
+
+      <section class="account__card account__card--grid">
+        <div class="account__avatar-block">
+          <img id="account-avatar-preview" src="images/photo.jpg" alt="Avatar preview">
+          <label class="btn btn--ghost account__avatar-btn" for="account-avatar">Завантажити</label>
+          <input type="file" id="account-avatar" accept="image/*" hidden>
+        </div>
+        <form class="account__form" id="accountForm">
+          <div class="account__form-row">
+            <div class="field">
+              <label for="account-name">Повне ім'я</label>
+              <input class="input" id="account-name" type="text" placeholder="Введіть ім'я" required>
+            </div>
+            <div class="field">
+              <label for="account-phone">Телефон</label>
+              <input class="input" id="account-phone" type="tel" placeholder="+380..." required>
+            </div>
+          </div>
+          <div class="account__form-row">
+            <div class="field">
+              <label for="account-email">Email</label>
+              <input class="input" id="account-email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+              <label for="account-role">Роль</label>
+              <input class="input" id="account-role" type="text" value="Owner" readonly>
+            </div>
+          </div>
+          <div class="account__form-actions">
+            <button class="btn btn--primary" type="submit">Зберегти профіль</button>
+          </div>
+          <p class="account__message" data-account-message></p>
+        </form>
+      </section>
+
+      <section class="account__card account__grid">
+        <div>
+          <h2>Безпека</h2>
+          <div class="account__actions">
+            <button class="btn btn--ghost" id="changePassword">Змінити пароль</button>
+            <button class="btn btn--ghost" id="logoutAll">Вийти з усіх пристроїв</button>
+          </div>
+          <p class="account__message" data-security-message></p>
+        </div>
+        <div>
+          <h2>Мова та локалізація</h2>
+          <div class="account__form-row account__form-row--stack">
+            <label for="account-language">Мова</label>
+            <select class="input" id="account-language">
+              <option value="uk">Українська</option>
+              <option value="en">English</option>
+            </select>
+            <label for="account-timezone">Таймзона</label>
+            <select class="input" id="account-timezone">
+              <option value="Europe/Kyiv">Europe/Kyiv</option>
+              <option value="Europe/Warsaw">Europe/Warsaw</option>
+              <option value="Europe/London">Europe/London</option>
+              <option value="UTC">UTC</option>
+            </select>
+            <label for="account-timeformat">Формат часу</label>
+            <select class="input" id="account-timeformat">
+              <option value="24h">24h</option>
+              <option value="12h">12h</option>
+            </select>
+            <label for="account-currency">Валюта</label>
+            <select class="input" id="account-currency">
+              <option value="UAH">UAH ₴</option>
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="account__card account__grid">
+        <div>
+          <h2>Сповіщення</h2>
+          <div class="account__toggles">
+            <label class="account__toggle">
+              <span>Email-сповіщення</span>
+              <label class="switch">
+                <input type="checkbox" id="notify-email" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="account__toggle">
+              <span>Push-сповіщення</span>
+              <label class="switch">
+                <input type="checkbox" id="notify-push">
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="account__toggle">
+              <span>Нагадування майстру про новий запис</span>
+              <label class="switch">
+                <input type="checkbox" id="notify-appointments" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="account__toggle">
+              <span>Ранковий дайджест розкладу</span>
+              <label class="switch">
+                <input type="checkbox" id="notify-digest">
+                <span class="slider"></span>
+              </label>
+            </label>
+          </div>
+        </div>
+        <div>
+          <h2>Приватність</h2>
+          <div class="account__toggles">
+            <label class="account__toggle">
+              <span>Показувати телефон клієнтам</span>
+              <label class="switch">
+                <input type="checkbox" id="privacy-phone" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="account__toggle">
+              <span>Показувати email клієнтам</span>
+              <label class="switch">
+                <input type="checkbox" id="privacy-email">
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="account__toggle">
+              <span>Отримувати маркетингові листи</span>
+              <label class="switch">
+                <input type="checkbox" id="privacy-marketing">
+                <span class="slider"></span>
+              </label>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="account__card account__danger">
+        <h2>Небезпечна зона</h2>
+        <div class="account__actions">
+          <button class="btn btn--danger" id="exportData">Експорт моїх даних</button>
+          <button class="btn btn--danger" id="deleteAccount">Видалити акаунт</button>
+        </div>
+        <p class="account__message" data-danger-message></p>
+      </section>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/account.js"></script>
 </body>
 </html>

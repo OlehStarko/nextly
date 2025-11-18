@@ -285,8 +285,10 @@
     gap: 16px;
     width: 100%;
     overflow-x: auto;
-    padding: 0 4px;
-    scroll-snap-type: x proximity;
+    padding: 0 12px;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 12px;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
 

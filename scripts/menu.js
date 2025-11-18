@@ -24,6 +24,8 @@ const ensurePageModule = async (page) => {
     services: () => import("./services.js"),
     team: () => import("./team.js"),
     finances: () => import("./finances.js"),
+    settings: () => import("./settings.js"),
+    account: () => import("./account.js"),
   };
   const loader = loaders[page];
   if (!loader) return;

@@ -19,14 +19,200 @@
     <div id="sidebar-root"></div>
 
     <main class="hero">
-      <h1 class="hero__title">Settings</h1>
-      <p>Порожня сторінка налаштувань. Тут буде контент.</p>
-      <div class="actions" role="group" aria-label="Сеанс">
-        <a class="btn btn--ghost" href="index.html">Log Out</a>
+      <div class="settings__header">
+        <h1 class="hero__title">Налаштування компанії</h1>
+        <p class="hero__subtitle">Глобальні параметри бізнесу та CRM</p>
+      </div>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Профіль бізнесу</h2>
+          <label class="settings__label" for="biz-name">Назва</label>
+          <input class="input" id="biz-name" type="text" placeholder="Назва компанії">
+
+          <label class="settings__label" for="biz-address">Адреса</label>
+          <input class="input" id="biz-address" type="text" placeholder="Адреса">
+
+          <label class="settings__label" for="biz-hours">Години роботи</label>
+          <textarea class="input settings__textarea" id="biz-hours" rows="2" placeholder="Пн-Пт 09:00–18:00; Сб 10:00–15:00"></textarea>
+        </div>
+        <div class="settings__logo-block">
+          <img id="biz-logo-preview" src="images/icons/logo_icon.svg" alt="Логотип">
+          <label class="btn btn--ghost" for="biz-logo">Завантажити логотип</label>
+          <input type="file" id="biz-logo" accept="image/*" hidden>
+        </div>
+      </section>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Команда</h2>
+          <p class="settings__note">Керування ролями виконується на сторінці Команда.</p>
+          <label class="settings__label" for="team-status">Статус нових членів</label>
+          <select class="input" id="team-status">
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+        <div>
+          <h2>Послуги</h2>
+          <p class="settings__note">Список послуг редагуйте на сторінці Services.</p>
+          <label class="settings__label" for="service-category">Категорії</label>
+          <input class="input" id="service-category" type="text" placeholder="Через кому: Hair, Nails">
+        </div>
+      </section>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Бронювання</h2>
+          <label class="settings__label" for="booking-buffer">Буфер між послугами (хв)</label>
+          <input class="input" id="booking-buffer" type="number" min="0" step="5" placeholder="10">
+
+          <label class="settings__label" for="booking-max">Макс. записів на день</label>
+          <input class="input" id="booking-max" type="number" min="1" step="1" placeholder="20">
+
+          <label class="settings__label" for="booking-cancel">Правила скасування</label>
+          <textarea class="input settings__textarea" id="booking-cancel" rows="2" placeholder="Скасування не пізніше ніж за 12 год."></textarea>
+
+          <div class="settings__toggles">
+            <label class="settings__toggle">
+              <span>Онлайн-запис увімкнено</span>
+              <label class="switch">
+                <input type="checkbox" id="booking-online" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="settings__toggle">
+              <span>Автопідтвердження</span>
+              <label class="switch">
+                <input type="checkbox" id="booking-auto" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+          </div>
+        </div>
+        <div>
+          <h2>Оплати</h2>
+          <div class="settings__toggles">
+            <label class="settings__toggle">
+              <span>Stripe / картка</span>
+              <label class="switch">
+                <input type="checkbox" id="pay-stripe">
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="settings__toggle">
+              <span>Готівка</span>
+              <label class="switch">
+                <input type="checkbox" id="pay-cash" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="settings__toggle">
+              <span>Авто-інвойси</span>
+              <label class="switch">
+                <input type="checkbox" id="pay-invoice">
+                <span class="slider"></span>
+              </label>
+            </label>
+          </div>
+          <label class="settings__label" for="pay-refund">Правила повернень</label>
+          <textarea class="input settings__textarea" id="pay-refund" rows="2" placeholder="Повернення за 24 години до візиту"></textarea>
+        </div>
+      </section>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Комунікації</h2>
+          <label class="settings__label" for="sms-provider">SMS провайдер</label>
+          <select class="input" id="sms-provider">
+            <option value="twilio">Twilio</option>
+            <option value="turbosms">TurboSMS</option>
+            <option value="nexmo">Nexmo</option>
+          </select>
+          <label class="settings__label" for="email-sender">Email відправник</label>
+          <input class="input" id="email-sender" type="text" placeholder="noreply@domain.com">
+          <label class="settings__label" for="wa-templates">WhatsApp шаблони</label>
+          <textarea class="input settings__textarea" id="wa-templates" rows="2" placeholder="Шаблони повідомлень"></textarea>
+        </div>
+        <div>
+          <h2>Нагадування</h2>
+          <label class="settings__label" for="reminder-template">Шаблон нагадувань</label>
+          <textarea class="input settings__textarea" id="reminder-template" rows="2" placeholder="Ваша зустріч ..."></textarea>
+          <label class="settings__label" for="promo-template">Шаблон промо</label>
+          <textarea class="input settings__textarea" id="promo-template" rows="2" placeholder="Акція ..."></textarea>
+        </div>
+      </section>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Пакети та ліміти</h2>
+          <label class="settings__label" for="limit-clients">Макс. клієнтів</label>
+          <input class="input" id="limit-clients" type="number" min="0" step="1" placeholder="0 = безліміт">
+          <label class="settings__label" for="limit-appts">Макс. записів/міс</label>
+          <input class="input" id="limit-appts" type="number" min="0" step="1" placeholder="0 = безліміт">
+          <label class="settings__label" for="limit-team">Макс. майстрів</label>
+          <input class="input" id="limit-team" type="number" min="0" step="1" placeholder="0 = безліміт">
+          <div class="settings__toggles">
+            <label class="settings__toggle">
+              <span>Аналітика та звіти</span>
+              <label class="switch">
+                <input type="checkbox" id="feat-analytics" checked>
+                <span class="slider"></span>
+              </label>
+            </label>
+            <label class="settings__toggle">
+              <span>SMS розсилки</span>
+              <label class="switch">
+                <input type="checkbox" id="feat-sms">
+                <span class="slider"></span>
+              </label>
+            </label>
+          </div>
+        </div>
+        <div>
+          <h2>Брендинг</h2>
+          <label class="settings__label" for="brand-color">Основний колір</label>
+          <input class="input" id="brand-color" type="color" value="#1b1b1b">
+          <label class="settings__toggle">
+            <span>White-label</span>
+            <label class="switch">
+              <input type="checkbox" id="brand-whitelabel">
+              <span class="slider"></span>
+            </label>
+          </label>
+        </div>
+      </section>
+
+      <section class="settings__card settings__grid">
+        <div>
+          <h2>Дані та безпека</h2>
+          <div class="settings__actions">
+            <button class="btn btn--ghost" id="backupData">Backup</button>
+            <button class="btn btn--ghost" id="restoreData">Restore</button>
+            <button class="btn btn--ghost" id="exportClients">Export Clients</button>
+            <button class="btn btn--ghost" id="exportAppointments">Export Appointments</button>
+          </div>
+        </div>
+        <div>
+          <h2>GDPR</h2>
+          <label class="settings__toggle">
+            <span>Відображати GDPR згоду</span>
+            <label class="switch">
+              <input type="checkbox" id="gdpr-consent" checked>
+              <span class="slider"></span>
+            </label>
+          </label>
+        </div>
+      </section>
+
+      <div class="settings__actions settings__actions--save">
+        <button class="btn btn--primary" type="button" id="saveSettings">Зберегти налаштування</button>
+        <p class="settings__message" data-settings-message></p>
       </div>
     </main>
   </div>
   <script defer src="scripts/app.js"></script>
   <script type="module" src="scripts/menu.js"></script>
+  <script type="module" src="scripts/settings.js"></script>
 </body>
 </html>

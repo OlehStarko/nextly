@@ -1,1 +1,86 @@
-/* Page-specific overrides for settings (empty for now) */
+.hero {
+  align-items: stretch;
+  gap: 24px;
+}
+
+.settings__header {
+  display: grid;
+  gap: 6px;
+}
+
+.settings__card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  display: grid;
+  gap: 10px;
+}
+
+.settings__label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.settings__select {
+  max-width: 260px;
+}
+
+.settings__message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.settings__grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.settings__logo-block {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.settings__logo-block img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.settings__textarea {
+  resize: vertical;
+}
+
+.settings__note {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.settings__toggles {
+  display: grid;
+  gap: 10px;
+}
+
+.settings__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.settings__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.settings__actions--save {
+  align-items: center;
+}

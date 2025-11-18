@@ -1,1 +1,160 @@
-/* Page-specific overrides for account (empty for now) */
+.hero {
+  align-items: stretch;
+  gap: 24px;
+}
+
+.account__header {
+  display: grid;
+  gap: 4px;
+}
+
+.account__card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+  display: grid;
+  gap: 12px;
+}
+
+.account__card--grid {
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+}
+
+.account__avatar-block {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.account__avatar-block img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+}
+
+.account__avatar-btn {
+  width: 100%;
+}
+
+.account__form {
+  display: grid;
+  gap: 12px;
+}
+
+.account__form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 16px;
+}
+
+.account__form-row--stack {
+  grid-template-columns: 1fr;
+}
+
+.account__form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.account__message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.account__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.account__grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.account__toggles {
+  display: grid;
+  gap: 10px;
+}
+
+.account__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.account__danger {
+  border: 1px solid #fecdd3;
+}
+
+.btn--danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e5e7eb;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+  background-color: #2563eb;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+@media (max-width: 900px) {
+  .account__card--grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account__form-actions {
+    flex-direction: column;
+  }
+
+  .account__actions {
+    justify-content: flex-start;
+  }
+}
