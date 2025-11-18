@@ -3,6 +3,34 @@ const RECORDS_STORAGE_KEY = "nextly_records";
 const SERVICES_STORAGE_KEY = "nextly_services";
 const MASTERS_STORAGE_KEY = "nextly_team";
 
+const seedClients = [
+  { id: "c1", name: "Марина", phone: "+3805636984" },
+  { id: "c2", name: "Світлана", phone: "+3805636984" },
+  { id: "c3", name: "Настя", phone: "+3805636984" },
+  { id: "c4", name: "Олег", phone: "+3805636984" },
+];
+
+const seedServices = [
+  { id: "s1", name: "Манікюр класичний", price: 500, duration: 60 },
+  { id: "s2", name: "Манікюр фірмовий", price: 500, duration: 60 },
+  { id: "s3", name: "Покраска волосся", price: 4000, duration: 90 },
+  { id: "s4", name: "Стрижка чоловіча", price: 700, duration: 45 },
+];
+
+const seedMasters = [
+  { id: "m1", name: "Аня", role: "Майстер" },
+];
+
+const seedRecords = () => {
+  const today = todayIso();
+  return [
+    { id: "r1", clientId: "c1", serviceId: "s1", masterId: "m1", date: today, time: "10:00", amount: 500, status: "done" },
+    { id: "r2", clientId: "c2", serviceId: "s2", masterId: "m1", date: today, time: "13:00", amount: 500, status: "planned" },
+    { id: "r3", clientId: "c3", serviceId: "s3", masterId: "m1", date: today, time: "15:00", amount: 4000, status: "planned" },
+    { id: "r4", clientId: "c4", serviceId: "s4", masterId: "m1", date: today, time: "17:00", amount: 700, status: "done" },
+  ];
+};
+
 const statusLabels = {
   planned: "Заплановано",
   done: "Виконано",
@@ -13,9 +41,11 @@ const readClients = () => {
   try {
     const raw = localStorage.getItem(CLIENTS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    localStorage.setItem(CLIENTS_STORAGE_KEY, JSON.stringify(seedClients));
+    return seedClients;
   } catch {
-    return [];
+    return seedClients;
   }
 };
 
@@ -23,9 +53,12 @@ const readRecords = () => {
   try {
     const raw = localStorage.getItem(RECORDS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    const seeded = seedRecords();
+    localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(seeded));
+    return seeded;
   } catch {
-    return [];
+    return seedRecords();
   }
 };
 
@@ -33,11 +66,12 @@ const readServices = () => {
   try {
     const raw = localStorage.getItem(SERVICES_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) return parsed;
-    if (parsed && typeof parsed === "object") return Object.values(parsed);
-    return [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    if (parsed && typeof parsed === "object" && Object.keys(parsed).length) return Object.values(parsed);
+    localStorage.setItem(SERVICES_STORAGE_KEY, JSON.stringify(seedServices));
+    return seedServices;
   } catch {
-    return [];
+    return seedServices;
   }
 };
 
@@ -45,11 +79,12 @@ const readMasters = () => {
   try {
     const raw = localStorage.getItem(MASTERS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) return parsed;
-    if (parsed && typeof parsed === "object") return Object.values(parsed);
-    return [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    if (parsed && typeof parsed === "object" && Object.keys(parsed).length) return Object.values(parsed);
+    localStorage.setItem(MASTERS_STORAGE_KEY, JSON.stringify(seedMasters));
+    return seedMasters;
   } catch {
-    return [];
+    return seedMasters;
   }
 };
 
@@ -139,15 +174,15 @@ const renderDashboardRecords = () => {
     daysRow.addEventListener("wheel", handleDaysWheel, { passive: false });
 
     // позиціонуємо today третім зліва
-    const scrollToday = () => {
-      const todayEl = daysRow.querySelector(".dash__day--today");
-      if (!todayEl) return;
-      const desired = todayEl.offsetLeft - todayEl.clientWidth * 2;
+    const scrollActive = () => {
+      const activeEl = daysRow.querySelector(".dash__day--active") || daysRow.querySelector(".dash__day--today");
+      if (!activeEl) return;
+      const desired = activeEl.offsetLeft - activeEl.clientWidth * 2;
       const maxLeft = Math.max(0, daysRow.scrollWidth - daysRow.clientWidth);
       const left = Math.min(maxLeft, Math.max(0, desired));
       daysRow.scrollTo({ left, behavior: "auto" });
     };
-    requestAnimationFrame(scrollToday);
+    requestAnimationFrame(scrollActive);
 
     // drag-to-scroll
     const startDrag = (e) => {
