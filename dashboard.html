@@ -17,18 +17,68 @@
   <div class="app-shell app-shell--dashboard">
     <div id="sidebar-root"></div>
 
-    <main class="hero">
-      <div class="dashboard__header">
-        <h1 class="hero__title">Dashboard</h1>
-        <p class="hero__subtitle">Швидкий огляд останніх записів</p>
-      </div>
-
-      <section class="dash-records">
-        <div class="dash-records__stats">
-          <div class="dash-records__chip" data-dash-count>Записів: 0</div>
-          <div class="dash-records__chip" data-dash-sum>Сума: 0 ₴</div>
+    <main class="hero hero--dash">
+      <header class="dash__header">
+        <div class="dash__title">
+          <div class="dash__crumb">Листопад 2025 р.</div>
+          <h1 class="hero__title" data-dash-date>11 листопада 2025</h1>
+          <p class="hero__subtitle">Огляд записів за вибраний день</p>
         </div>
-        <div class="dash-records__list" id="dashRecordsList" aria-live="polite"></div>
+        <div class="dash__controls">
+          <button class="btn btn--ghost dash__icon" type="button" aria-label="Меню">☰</button>
+          <button class="btn btn--ghost dash__chip" type="button" data-dash-range="today">Сьогодні</button>
+          <div class="dash__toggle">
+            <button class="dash__toggle-btn is-active" type="button" data-view="list">📋</button>
+            <button class="dash__toggle-btn" type="button" data-view="grid">🔲</button>
+          </div>
+          <input class="input dash__date" type="date" id="dashDate">
+          <button class="btn btn--ghost dash__icon" type="button" aria-label="Пошук">🔍</button>
+        </div>
+      </header>
+
+      <section class="dash__calendar-wrap">
+        <button class="dash__nav" type="button" id="dashPrev">‹</button>
+        <div class="dash__calendar" id="dashDays"></div>
+        <button class="dash__nav" type="button" id="dashNext">›</button>
+      </section>
+
+      <section class="dash__kpi">
+        <div class="dash__kpi-card">
+          <p class="dash__kpi-label">Записів</p>
+          <p class="dash__kpi-value" data-dash-count>0</p>
+        </div>
+        <div class="dash__kpi-card">
+          <p class="dash__kpi-label">Сума</p>
+          <p class="dash__kpi-value" data-dash-sum>0 ₴</p>
+        </div>
+      </section>
+
+      <button class="dash__showmore" type="button" id="dashShowMore">Показати більше</button>
+
+      <section class="dash__layout">
+        <aside class="dash__summary">
+          <div class="dash__summary-head">
+            <button class="btn btn--primary dash__add" type="button" onclick="window.location.href='records.html'">+ Додати</button>
+          </div>
+          <div class="dash__summary-block">
+            <div class="dash__summary-row">
+              <span>Записів</span>
+              <span data-dash-count>0</span>
+            </div>
+            <div class="dash__summary-row">
+              <span>Сума</span>
+              <span data-dash-sum>0 ₴</span>
+            </div>
+          </div>
+          <div class="dash__summary-block">
+            <p class="dash__summary-title">Послуги</p>
+            <div class="dash__services" id="dashServices"></div>
+          </div>
+        </aside>
+
+        <section class="dash-records">
+          <div class="dash-records__list" id="dashRecordsList" aria-live="polite"></div>
+        </section>
       </section>
     </main>
   </div>

@@ -3,6 +3,15 @@ const RECORDS_STORAGE_KEY = "nextly_records";
 const SERVICES_STORAGE_KEY = "nextly_services";
 const MASTERS_STORAGE_KEY = "nextly_team";
 
+const sampleServicesSeed = [
+  { id: "s1", name: "Стрижка", price: 500, duration: 60, active: true },
+  { id: "s2", name: "Манікюр", price: 700, duration: 60, active: true },
+];
+
+const sampleMastersSeed = [
+  { id: "m1", name: "Ірина", role: "Майстер", phone: "+380991234567", exp: 3, active: true },
+];
+
 const statusLabels = {
   planned: "Заплановано",
   done: "Виконано",
@@ -53,11 +62,12 @@ const readServices = () => {
   try {
     const raw = localStorage.getItem(SERVICES_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) return parsed;
-    if (parsed && typeof parsed === "object") return Object.values(parsed);
-    return [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    if (parsed && typeof parsed === "object" && Object.keys(parsed).length) return Object.values(parsed);
+    localStorage.setItem(SERVICES_STORAGE_KEY, JSON.stringify(sampleServicesSeed));
+    return sampleServicesSeed;
   } catch {
-    return [];
+    return sampleServicesSeed;
   }
 };
 
@@ -65,11 +75,12 @@ const readMasters = () => {
   try {
     const raw = localStorage.getItem(MASTERS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) return parsed;
-    if (parsed && typeof parsed === "object") return Object.values(parsed);
-    return [];
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+    if (parsed && typeof parsed === "object" && Object.keys(parsed).length) return Object.values(parsed);
+    localStorage.setItem(MASTERS_STORAGE_KEY, JSON.stringify(sampleMastersSeed));
+    return sampleMastersSeed;
   } catch {
-    return [];
+    return sampleMastersSeed;
   }
 };
 

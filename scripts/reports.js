@@ -5,6 +5,25 @@ const REPORT_KEYS = {
   masters: "nextly_team",
 };
 
+const sampleClients = [
+  { id: "c1", name: "Оксана", phone: "+380665821908" },
+  { id: "c2", name: "Марія", phone: "0979876543" },
+];
+
+const sampleServices = [
+  { id: "s1", name: "Стрижка", price: 500, duration: 60, active: true },
+  { id: "s2", name: "Манікюр", price: 700, duration: 60, active: true },
+];
+
+const sampleMasters = [
+  { id: "m1", name: "Ірина", role: "Майстер", phone: "+380991234567", exp: 3, active: true },
+];
+
+const sampleRecords = [
+  { id: "r1", clientId: "c1", serviceId: "s1", masterId: "m1", date: new Date().toISOString().slice(0, 10), time: "11:00", amount: 500, status: "done", paid: true },
+  { id: "r2", clientId: "c2", serviceId: "s2", masterId: "m1", date: new Date().toISOString().slice(0, 10), time: "12:00", amount: 700, status: "done", paid: true },
+];
+
 const safeRead = (key, fallback = []) => {
   try {
     const raw = localStorage.getItem(key);
@@ -33,10 +52,27 @@ const formatKeyDate = (d) => d.toISOString().slice(0, 10);
 
 const ReportsService = {
   loadData() {
-    const records = safeRead(REPORT_KEYS.records, []);
-    const clients = safeRead(REPORT_KEYS.clients, []);
-    const services = safeRead(REPORT_KEYS.services, []);
-    const masters = safeRead(REPORT_KEYS.masters, []);
+    let records = safeRead(REPORT_KEYS.records, []);
+    let clients = safeRead(REPORT_KEYS.clients, []);
+    let services = safeRead(REPORT_KEYS.services, []);
+    let masters = safeRead(REPORT_KEYS.masters, []);
+
+    if (!clients.length) {
+      clients = sampleClients;
+      localStorage.setItem(REPORT_KEYS.clients, JSON.stringify(clients));
+    }
+    if (!services.length) {
+      services = sampleServices;
+      localStorage.setItem(REPORT_KEYS.services, JSON.stringify(services));
+    }
+    if (!masters.length) {
+      masters = sampleMasters;
+      localStorage.setItem(REPORT_KEYS.masters, JSON.stringify(masters));
+    }
+    if (!records.length) {
+      records = sampleRecords;
+      localStorage.setItem(REPORT_KEYS.records, JSON.stringify(records));
+    }
     return { records, clients, services, masters };
   },
 
