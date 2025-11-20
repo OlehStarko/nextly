@@ -38,6 +38,10 @@ const statusLabels = {
   canceled: "Скасовано",
 };
 
+const TIMELINE_START_HOUR = 8;
+const TIMELINE_END_HOUR = 20;
+const TIMELINE_STEP_MINUTES = 30;
+
 const readClients = () => {
   try {
     const raw = localStorage.getItem(CLIENTS_STORAGE_KEY);
@@ -155,6 +159,23 @@ const formatShortDateLabel = (iso) => {
   if (!iso) return "";
   return new Date(iso).toLocaleDateString("uk-UA", { day: "2-digit", month: "short" });
 };
+
+const timeToMinutes = (timeStr) => {
+  if (!timeStr) return TIMELINE_START_HOUR * 60;
+  const [hours, minutes] = timeStr.split(":").map((value) => Number(value) || 0);
+  return hours * 60 + minutes;
+};
+
+const buildTimelineSlots = () => {
+  const slots = [];
+  for (let hour = TIMELINE_START_HOUR; hour <= TIMELINE_END_HOUR; hour++) {
+    slots.push(`${String(hour).padStart(2, "0")}:00`);
+    if (hour === TIMELINE_END_HOUR) break;
+    slots.push(`${String(hour).padStart(2, "0")}:${String(TIMELINE_STEP_MINUTES).padStart(2, "0")}`);
+  }
+  return slots;
+};
+
 const DASHBOARD_VIEW_KEY = "nextly_dashboard_view";
 const DASHBOARD_PERIOD_KEY = "nextly_dashboard_period";
 const PERIOD_LABELS = {
@@ -350,7 +371,7 @@ const renderDashboardRecords = () => {
         if (!daysRow) return;
         if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
           e.preventDefault();
-          daysRow.scrollBy({ left: e.deltaY, behavior: "auto" });
+          daysRow.scrollBy({ left: e.deltaY, behavior: "smooth" });
         }
       };
     }
@@ -364,7 +385,7 @@ const renderDashboardRecords = () => {
       const desired = activeEl.offsetLeft - activeEl.clientWidth * 2;
       const maxLeft = Math.max(0, daysRow.scrollWidth - daysRow.clientWidth);
       const left = Math.min(maxLeft, Math.max(0, desired));
-      daysRow.scrollTo({ left, behavior: "auto" });
+      daysRow.scrollTo({ left, behavior: "smooth" });
     };
     requestAnimationFrame(scrollActive);
 
@@ -449,7 +470,14 @@ const renderDashboardRecords = () => {
 
   if (recordsView === "timeline") {
     list.classList.add("dash-records__list--timeline");
-    list.innerHTML = sorted
+    const timelineSlots = buildTimelineSlots();
+    const slotHeight = 32;
+    const pxPerMinute = slotHeight / TIMELINE_STEP_MINUTES;
+    const timelineHeight = timelineSlots.length * slotHeight;
+    const timelineScale = timelineSlots
+      .map((time) => `<div class="dash-timeline__scale-item">${time}</div>`)
+      .join("");
+    const eventsMarkup = sorted
       .map((rec) => {
         const client = clientsById.get(rec.clientId);
         const service = servicesById.get(rec.serviceId);
@@ -463,24 +491,26 @@ const renderDashboardRecords = () => {
         const timeLabel = showDateTags
           ? `${formatShortDateLabel(rec.date)} • ${rec.time || "--:--"}`
           : rec.time || "--:--";
+        const startMinutes = timeToMinutes(rec.time) - TIMELINE_START_HOUR * 60;
+        const durationMinutes = service?.duration || 60;
+        const top = Math.max(0, startMinutes * pxPerMinute);
+        const height = Math.max(pxPerMinute * TIMELINE_STEP_MINUTES, durationMinutes * pxPerMinute);
         return `
-          <div class="dash-timeline__row">
-            <div class="dash-timeline__time">${timeLabel}</div>
-            <div class="${statusClass}">
-              <div class="dash-timeline__body">
-                <h3>${name}</h3>
-                ${phone}
-                <p class="dash-timeline__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
-              </div>
-              <div class="dash-timeline__meta">
-                <span class="dash-timeline__badge">${statusLabels[rec.status] || rec.status}</span>
-                <span class="dash-timeline__price">₴ ${amount}</span>
-              </div>
+          <div class="${statusClass}" style="top:${top}px;height:${height}px">
+            <div class="dash-timeline__body">
+              <h3>${name}</h3>
+              ${phone}
+              <p class="dash-timeline__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
+            </div>
+            <div class="dash-timeline__meta">
+              <span class="dash-timeline__time-label">${timeLabel}</span>
+              <span class="dash-timeline__price">₴ ${amount}</span>
             </div>
           </div>
         `;
       })
       .join("");
+    list.innerHTML = `<div class="dash-timeline"><div class="dash-timeline__scale">${timelineScale}</div><div class="dash-timeline__events" style="height:${timelineHeight}px">${eventsMarkup}</div></div>`;
   } else {
     list.classList.remove("dash-records__list--timeline");
     list.innerHTML = sorted
@@ -489,28 +519,31 @@ const renderDashboardRecords = () => {
         const service = servicesById.get(rec.serviceId);
         const master = mastersById.get(rec.masterId);
         const name = client?.name || "Клієнт";
-        const phone = client?.phone ? `<span class="dash-records__phone">${client.phone}</span>` : "";
+        const phone = client?.phone || "";
         const serviceName = service?.name ? service.name : "—";
         const masterName = master?.name ? master.name : "";
         const amount = (Number(rec.amount) || 0).toFixed(2);
+        const avatar = client?.photo || "images/photo.jpg";
         return `
           <article class="dash-records__card">
-            <div class="dash-records__head">
-              <div>
-                <h3>${name}</h3>
-                <p class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
-              </div>
+            <div class="dash-records__person">
+              <span class="dash-records__avatar">
+                <img src="${avatar}" alt="${name}">
+              </span>
+              <h3>${name}</h3>
             </div>
-            <div class="dash-records__service">${serviceName}</div>
-            <div class="dash-records__phone">${client?.phone || ""}</div>
+            <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
+            <div class="dash-records__phone">${phone || "—"}</div>
             <div class="dash-records__time">
               ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
-              🕒 ${rec.time || "--:--"}
+              <img src="images/icons/clock.svg" alt="" aria-hidden="true">
+              <span>${rec.time || "--:--"}</span>
             </div>
-            <div class="dash-records__meta">
-              <span class="dash-records__price">₴ ${amount}</span>
-              <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+            <div class="dash-records__price">
+              <img src="images/icons/money.svg" alt="" aria-hidden="true">
+              <span>₴ ${amount}</span>
             </div>
+            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
           </article>
         `;
       })
@@ -609,5 +642,10 @@ const renderDashboardRecords = () => {
 
 document.addEventListener("DOMContentLoaded", renderDashboardRecords);
 document.addEventListener("page:ready", (e) => {
-  if (e.detail?.page === "dashboard") renderDashboardRecords();
+  if (e.detail?.page === "dashboard") {
+    eventsBound = false;
+    renderDashboardRecords();
+  } else {
+    eventsBound = false;
+  }
 });
