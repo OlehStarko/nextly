@@ -52,6 +52,19 @@ const renderSidebar = (activeSlug) => {
   root.innerHTML = `
     <div class="mobile-header">
       <img class="mobile-header__logo" src="images/icons/logo_icon.svg" alt="Nextly">
+      <div class="mobile-header__actions">
+        <button class="btn btn--ghost mobile-header__today" type="button" data-dash-range="today">Сьогодні</button>
+        <div class="mobile-header__search-field" data-dash-search>
+          <input class="mobile-header__search-input" type="text" placeholder="Пошук" aria-label="Пошук" data-dash-search-input>
+        </div>
+        <button class="btn mobile-header__icon" type="button" aria-label="Пошук" id="mobileSearchToggle">
+          <img src="images/icons/search.svg" alt="" aria-hidden="true">
+        </button>
+        <a class="mobile-header__avatar" href="account.html" aria-label="Account">
+          <img src="images/photo.jpg" alt="User profile">
+          <span class="sidebar__status" aria-hidden="true"></span>
+        </a>
+      </div>
     </div>
     <aside class="sidebar" aria-label="Головне меню">
       <div class="sidebar__header">
@@ -68,6 +81,19 @@ const renderSidebar = (activeSlug) => {
       </div>
     </aside>
   `;
+
+  const mobileSearchField = root.querySelector(".mobile-header__search-field");
+  const mobileSearchInput = mobileSearchField?.querySelector("input");
+  const mobileSearchToggle = document.getElementById("mobileSearchToggle");
+
+  mobileSearchToggle?.addEventListener("click", () => {
+    const isOpen = mobileSearchField?.classList.toggle("is-open");
+    if (isOpen) {
+      mobileSearchInput?.focus();
+    } else {
+      mobileSearchInput?.blur();
+    }
+  });
 };
 
 const initSpaNav = () => {

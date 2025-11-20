@@ -96,15 +96,169 @@ const atStartOfDay = (d) => {
   x.setHours(0, 0, 0, 0);
   return x;
 };
+const addDays = (date, amount) => {
+  const next = new Date(date);
+  next.setDate(next.getDate() + amount);
+  return next;
+};
 const ymd = (d) => {
   const x = atStartOfDay(d);
   return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+};
+const getRangeBoundaries = (iso, period) => {
+  const base = iso ? new Date(iso) : new Date();
+  let start = new Date(base);
+  let end = new Date(base);
+  switch (period) {
+    case "week": {
+      const day = (base.getDay() + 6) % 7; // Monday start
+      start = addDays(base, -day);
+      end = addDays(start, 6);
+      break;
+    }
+    case "month": {
+      start = new Date(base.getFullYear(), base.getMonth(), 1);
+      end = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+      break;
+    }
+    case "year": {
+      start = new Date(base.getFullYear(), 0, 1);
+      end = new Date(base.getFullYear(), 11, 31);
+      break;
+    }
+    default: {
+      start = atStartOfDay(base);
+      end = atStartOfDay(base);
+    }
+  }
+  return { start: ymd(start), end: ymd(end) };
+};
+
+const formatRangeLabel = (startIso, endIso, period) => {
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+  if (period === "day") {
+    return start.toLocaleDateString("uk-UA", { day: "numeric", month: "long", year: "numeric" });
+  }
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+  const sameYear = start.getFullYear() === end.getFullYear();
+  const startLabel = start.toLocaleDateString("uk-UA", {
+    day: "numeric",
+    month: sameMonth ? "long" : "short",
+    year: sameYear ? undefined : "numeric",
+  });
+  const endLabel = end.toLocaleDateString("uk-UA", { day: "numeric", month: "long", year: "numeric" });
+  return `${startLabel} – ${endLabel}`;
+};
+
+const formatShortDateLabel = (iso) => {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("uk-UA", { day: "2-digit", month: "short" });
+};
+const DASHBOARD_VIEW_KEY = "nextly_dashboard_view";
+const DASHBOARD_PERIOD_KEY = "nextly_dashboard_period";
+const PERIOD_LABELS = {
+  day: "День",
+  week: "Тиждень",
+  month: "Місяць",
+  year: "Рік",
 };
 let selectedDate = todayIso();
 let currentMonth = atStartOfDay(new Date());
 let eventsBound = false;
 let handleDaysWheel = null;
 let dragState = null;
+let recordsView = localStorage.getItem(DASHBOARD_VIEW_KEY) || "list";
+let currentPeriod = localStorage.getItem(DASHBOARD_PERIOD_KEY) || "day";
+let searchQuery = "";
+
+const syncSearchInputs = () => {
+  document.querySelectorAll("[data-dash-search-input]").forEach((input) => {
+    if (input.value !== searchQuery) input.value = searchQuery;
+  });
+};
+
+const setSearchQuery = (value) => {
+  const next = value ?? "";
+  if (next === searchQuery) return;
+  searchQuery = next;
+  syncSearchInputs();
+  renderDashboardRecords();
+};
+const bindDashSearchControls = () => {
+  document.querySelectorAll("[data-dash-search]").forEach((wrap) => {
+    if (wrap.dataset.bound === "true") return;
+    const toggle = wrap.querySelector("[data-search-toggle]") || wrap.querySelector("button");
+    const input = wrap.querySelector("input");
+    if (!toggle || !input) return;
+    input.value = searchQuery;
+    toggle.addEventListener("click", () => {
+      const isOpen = wrap.classList.toggle("is-open");
+      if (isOpen) {
+        input.focus();
+      } else {
+        input.blur();
+      }
+    });
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        wrap.classList.remove("is-open");
+        input.blur();
+      }
+    });
+    input.addEventListener("blur", () => {
+      wrap.classList.remove("is-open");
+    });
+    input.addEventListener("input", (event) => setSearchQuery(event.target.value));
+    wrap.dataset.bound = "true";
+  });
+};
+
+const bindDashPeriodMenu = () => {
+  document.querySelectorAll("[data-period-wrap]").forEach((wrap) => {
+    const labelEl = wrap.querySelector("[data-period-label]");
+    const toggle = wrap.querySelector("[data-period-toggle]");
+    const menu = wrap.querySelector("[data-period-menu]");
+    if (labelEl) labelEl.textContent = PERIOD_LABELS[currentPeriod] || PERIOD_LABELS.day;
+    if (wrap.dataset.bound === "true" || !toggle || !menu) return;
+    const updateLabel = () => {
+      if (labelEl) labelEl.textContent = PERIOD_LABELS[currentPeriod] || PERIOD_LABELS.day;
+    };
+    const closeMenu = () => {
+      menu.classList.remove("is-open");
+      document.removeEventListener("click", outsideClick);
+    };
+    const outsideClick = (e) => {
+      if (!wrap.contains(e.target)) {
+        closeMenu();
+      }
+    };
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (menu.classList.contains("is-open")) {
+        closeMenu();
+      } else {
+        menu.classList.add("is-open");
+        document.addEventListener("click", outsideClick);
+      }
+    });
+    menu.querySelectorAll("button[data-period]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentPeriod = btn.dataset.period || "day";
+        try {
+          localStorage.setItem(DASHBOARD_PERIOD_KEY, currentPeriod);
+        } catch (e) {
+          console.warn("Не вдалося зберегти період", e);
+        }
+        updateLabel();
+        closeMenu();
+        renderDashboardRecords();
+      });
+    });
+    wrap.dataset.bound = "true";
+  });
+};
 
 const renderDashboardRecords = () => {
   if (document.body.dataset.page !== "dashboard") return;
@@ -119,7 +273,9 @@ const renderDashboardRecords = () => {
   const prevBtn = document.getElementById("dashPrev");
   const nextBtn = document.getElementById("dashNext");
   const servicesList = document.getElementById("dashServices");
-  const todayBtn = document.querySelector('[data-dash-range="today"]');
+  const todayButtons = Array.from(document.querySelectorAll('[data-dash-range="today"]'));
+  const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
+  const monthToggle = document.querySelector("[data-month-toggle]");
   if (!list) return;
 
   const clients = readClients();
@@ -128,6 +284,19 @@ const renderDashboardRecords = () => {
   const records = readRecords();
 
   selectedDate = dateInput?.value || selectedDate || todayIso();
+  syncSearchInputs();
+  const range = getRangeBoundaries(selectedDate, currentPeriod);
+  const toggleTodayActive = () => {
+    const isToday = selectedDate === todayIso();
+    todayButtons.forEach((btn) => btn.classList.toggle("is-active", isToday));
+  };
+  toggleTodayActive();
+  bindDashPeriodMenu();
+
+  viewButtons.forEach((btn) => {
+    const targetView = btn.dataset.view || "list";
+    btn.classList.toggle("is-active", targetView === recordsView);
+  });
 
   const renderDays = () => {
     if (!daysRow) return;
@@ -232,16 +401,40 @@ const renderDashboardRecords = () => {
 
   if (dateInput && !dateInput.value) dateInput.value = selectedDate;
   if (dateLabel) {
-    const dateObj = new Date(selectedDate);
-    const formatted = dateObj.toLocaleDateString("uk-UA", { day: "numeric", month: "long", year: "numeric" });
-    dateLabel.textContent = formatted;
+    dateLabel.textContent = formatRangeLabel(range.start, range.end, currentPeriod);
   }
   if (crumb) {
     crumb.textContent = currentMonth.toLocaleDateString("uk-UA", { month: "long", year: "numeric" });
   }
 
-  const filtered = records.filter((r) => r.date === selectedDate);
-  const sorted = [...filtered].sort((a, b) => (a.time || "").localeCompare(b.time || "") || (a.date || "").localeCompare(b.date || ""));
+  const clientsById = new Map(clients.map((c) => [c.id, c]));
+  const servicesById = new Map(services.map((s) => [s.id, s]));
+  const mastersById = new Map(masters.map((m) => [m.id, m]));
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+
+  const matchesSearch = (rec) => {
+    if (!normalizedSearch) return true;
+    const client = clientsById.get(rec.clientId);
+    const service = servicesById.get(rec.serviceId);
+    const master = mastersById.get(rec.masterId);
+    const haystack = [
+      client?.name,
+      client?.phone,
+      service?.name,
+      master?.name,
+      rec.time,
+      rec.date,
+      statusLabels[rec.status],
+    ];
+    return haystack.some((value) => typeof value === "string" && value.toLowerCase().includes(normalizedSearch));
+  };
+
+  const filtered = records.filter(
+    (r) => r.date >= range.start && r.date <= range.end && matchesSearch(r)
+  );
+  const sorted = [...filtered].sort(
+    (a, b) => (a.date || "").localeCompare(b.date || "") || (a.time || "").localeCompare(b.time || "")
+  );
 
   const total = filtered.reduce((acc, r) => acc + (Number(r.amount) || 0), 0);
   if (countEl) countEl.textContent = `${filtered.length}`;
@@ -252,42 +445,84 @@ const renderDashboardRecords = () => {
     return;
   }
 
-  list.innerHTML = sorted
-    .map((rec) => {
-      const client = clients.find((c) => c.id === rec.clientId);
-      const service = services.find((s) => s.id === rec.serviceId);
-      const master = masters.find((m) => m.id === rec.masterId);
-      const name = client?.name || "Клієнт";
-      const phone = client?.phone ? `<span class="dash-records__phone">${client.phone}</span>` : "";
-      const serviceName = service?.name ? service.name : "—";
-      const masterName = master?.name ? master.name : "";
-      const amount = (Number(rec.amount) || 0).toFixed(2);
-      return `
-        <article class="dash-records__card">
-          <div class="dash-records__head">
-            <div>
-              <h3>${name}</h3>
-              <p class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
+  const showDateTags = currentPeriod !== "day";
+
+  if (recordsView === "timeline") {
+    list.classList.add("dash-records__list--timeline");
+    list.innerHTML = sorted
+      .map((rec) => {
+        const client = clientsById.get(rec.clientId);
+        const service = servicesById.get(rec.serviceId);
+        const master = mastersById.get(rec.masterId);
+        const name = client?.name || "Клієнт";
+        const phone = client?.phone ? `<p class="dash-timeline__phone">${client.phone}</p>` : "";
+        const serviceName = service?.name ? service.name : "—";
+        const masterName = master?.name ? master.name : "";
+        const amount = (Number(rec.amount) || 0).toFixed(2);
+        const statusClass = `dash-timeline__event dash-timeline__event--${rec.status}`;
+        const timeLabel = showDateTags
+          ? `${formatShortDateLabel(rec.date)} • ${rec.time || "--:--"}`
+          : rec.time || "--:--";
+        return `
+          <div class="dash-timeline__row">
+            <div class="dash-timeline__time">${timeLabel}</div>
+            <div class="${statusClass}">
+              <div class="dash-timeline__body">
+                <h3>${name}</h3>
+                ${phone}
+                <p class="dash-timeline__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
+              </div>
+              <div class="dash-timeline__meta">
+                <span class="dash-timeline__badge">${statusLabels[rec.status] || rec.status}</span>
+                <span class="dash-timeline__price">₴ ${amount}</span>
+              </div>
             </div>
           </div>
-          <div class="dash-records__service">${serviceName}</div>
-          <div class="dash-records__phone">${client?.phone || ""}</div>
-          <div class="dash-records__time">🕒 ${rec.time || "--:--"}</div>
-          <div class="dash-records__meta">
-            <span class="dash-records__price">₴ ${amount}</span>
-            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
+        `;
+      })
+      .join("");
+  } else {
+    list.classList.remove("dash-records__list--timeline");
+    list.innerHTML = sorted
+      .map((rec) => {
+        const client = clientsById.get(rec.clientId);
+        const service = servicesById.get(rec.serviceId);
+        const master = mastersById.get(rec.masterId);
+        const name = client?.name || "Клієнт";
+        const phone = client?.phone ? `<span class="dash-records__phone">${client.phone}</span>` : "";
+        const serviceName = service?.name ? service.name : "—";
+        const masterName = master?.name ? master.name : "";
+        const amount = (Number(rec.amount) || 0).toFixed(2);
+        return `
+          <article class="dash-records__card">
+            <div class="dash-records__head">
+              <div>
+                <h3>${name}</h3>
+                <p class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
+              </div>
+            </div>
+            <div class="dash-records__service">${serviceName}</div>
+            <div class="dash-records__phone">${client?.phone || ""}</div>
+            <div class="dash-records__time">
+              ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
+              🕒 ${rec.time || "--:--"}
+            </div>
+            <div class="dash-records__meta">
+              <span class="dash-records__price">₴ ${amount}</span>
+              <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  }
 
   // services summary
   if (servicesList) {
     const counts = new Map();
     filtered.forEach((r) => {
       const key = r.serviceId || "none";
-      const svc = services.find((s) => s.id === key);
+      const svc = servicesById.get(key);
       const name = svc?.name || "Без послуги";
       counts.set(name, (counts.get(name) || 0) + 1);
     });
@@ -328,14 +563,46 @@ const renderDashboardRecords = () => {
       renderDashboardRecords();
     });
 
-    todayBtn?.addEventListener("click", () => {
-      selectedDate = todayIso();
-      const d = new Date(selectedDate);
-      currentMonth = atStartOfDay(new Date(d.getFullYear(), d.getMonth(), 1));
-      if (dateInput) dateInput.value = selectedDate;
-      renderDashboardRecords();
+    todayButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedDate = todayIso();
+        const d = new Date(selectedDate);
+        currentMonth = atStartOfDay(new Date(d.getFullYear(), d.getMonth(), 1));
+        if (dateInput) dateInput.value = selectedDate;
+        renderDashboardRecords();
+      });
     });
 
+    monthToggle?.addEventListener("click", () => {
+      if (!dateInput) return;
+      if (typeof dateInput.showPicker === "function") {
+        dateInput.showPicker();
+      } else {
+        dateInput.focus();
+        dateInput.click();
+      }
+    });
+
+    viewButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const nextView = btn.dataset.view || "list";
+        if (recordsView === nextView) return;
+        recordsView = nextView;
+        try {
+          localStorage.setItem(DASHBOARD_VIEW_KEY, recordsView);
+        } catch (e) {
+          console.warn("Не вдалося зберегти режим відображення", e);
+        }
+        viewButtons.forEach((control) => {
+          const targetView = control.dataset.view || "list";
+          control.classList.toggle("is-active", targetView === recordsView);
+        });
+        renderDashboardRecords();
+      });
+    });
+
+    bindDashSearchControls();
+    bindDashPeriodMenu();
     eventsBound = true;
   }
 };

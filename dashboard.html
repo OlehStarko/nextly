@@ -20,47 +20,78 @@
     <main class="hero hero--dash">
       <header class="dash__header">
         <div class="dash__title">
-          <h1 class="hero__title" data-dash-date>11 листопада 2025</h1>
+          <div class="dash__title-row">
+            <h1 class="hero__title" data-dash-date>11 листопада 2025</h1>
+            <div class="dash__title-actions">
+              <button class="btn btn--ghost dash__chip dash__chip--today" type="button" data-dash-range="today">Сьогодні</button>
+              <div class="dash__toggle">
+                <button class="dash__toggle-btn is-active" type="button" data-view="list" aria-label="Список">
+                  <img src="images/icons/clock.svg" alt="" aria-hidden="true">
+                </button>
+                <button class="dash__toggle-btn" type="button" data-view="timeline" aria-label="Хронологія">
+                  <img src="images/icons/list.svg" alt="" aria-hidden="true">
+                </button>
+              </div>
+            </div>
+              <div class="dash__controls">
+              <div class="dash__search" data-dash-search>
+                <input class="dash__search-input" type="text" placeholder="Пошук записів" aria-label="Пошук записів" data-dash-search-input />
+                <button class="btn dash__icon" type="button" aria-label="Пошук" data-search-toggle>
+                  <img src="images/icons/search.svg" alt="" aria-hidden="true">
+                </button>
+              </div>
+              <div class="dash__period" data-period-wrap>
+                <button class="btn btn--ghost dash__chip dash__chip--period" type="button" data-period-toggle>
+                  <span data-period-label>День</span>
+                  <img src="images/icons/arrow_down.svg" alt="" aria-hidden="true">
+                </button>
+                <div class="dash__period-menu" data-period-menu>
+                  <button type="button" data-period="day">День</button>
+                  <button type="button" data-period="week">Тиждень</button>
+                  <button type="button" data-period="month">Місяць</button>
+                  <button type="button" data-period="year">Рік</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="dash__crumb-row">
-            <span class="dash__crumb">Листопад 2025 р.</span>
+            <button class="dash__crumb-btn dash__crumb-btn--picker" type="button" data-month-toggle>
+              <span class="dash__crumb">Листопад 2025 р.</span>
+              <img src="images/icons/arrow_down.svg" alt="" aria-hidden="true">
+            </button>
+            <input class="dash__date-input" type="date" id="dashDate" aria-label="Вибрати дату">
           </div>
-          <p class="hero__subtitle">Огляд записів за вибраний день</p>
-        </div>
-        <div class="dash__controls">
-          <button class="btn btn--ghost dash__chip" type="button" data-dash-range="today">Сьогодні</button>
-          <div class="dash__toggle">
-            <button class="dash__toggle-btn is-active" type="button" data-view="list">🕒</button>
-            <button class="dash__toggle-btn" type="button" data-view="grid">⬜</button>
-          </div>
-          <button class="btn btn--ghost dash__icon" type="button" aria-label="Пошук">🔍</button>
-          <button class="btn btn--ghost dash__chip" type="button">День ▾</button>
         </div>
       </header>
 
       <section class="dash__calendar-wrap">
-        <button class="dash__nav" id="dashPrev" aria-label="Попередній місяць">‹</button>
+        <button class="dash__nav" id="dashPrev" aria-label="Попередній місяць">
+          <img src="images/icons/arrow_left.svg" alt="" aria-hidden="true">
+        </button>
         <div class="dash__calendar" id="dashDays"></div>
-        <button class="dash__nav" id="dashNext" aria-label="Наступний місяць">›</button>
+        <button class="dash__nav" id="dashNext" aria-label="Наступний місяць">
+          <img src="images/icons/arrow_right.svg" alt="" aria-hidden="true">
+        </button>
       </section>
 
       <button class="dash__showmore" type="button" id="dashShowMore">Показати більше</button>
 
       <section class="dash__layout">
         <aside class="dash__summary">
-          <div class="dash__summary-head">
-            <button class="btn btn--primary dash__add" type="button" onclick="window.location.href='records.html'">+ Додати</button>
-          </div>
-          <div class="dash__summary-block">
+          <button class="dash__add dash__add--pill" type="button" onclick="window.location.href='records.html'">
+            <span>+</span> Додати <img src="images/icons/arrow_down.svg" alt="" aria-hidden="true">
+          </button>
+          <div class="dash__summary-panel">
             <div class="dash__summary-row">
               <span>Записів</span>
-              <span data-dash-count>0</span>
+              <div class="dash__summary-value" data-dash-count>0</div>
             </div>
+            <div class="dash__summary-progress dash__summary-progress--blue" aria-hidden="true"></div>
             <div class="dash__summary-row">
               <span>Сума</span>
-              <span data-dash-sum>0 ₴</span>
+              <div class="dash__summary-value" data-dash-sum>0 ₴</div>
             </div>
-          </div>
-          <div class="dash__summary-block">
+            <div class="dash__summary-progress dash__summary-progress--green" aria-hidden="true"></div>
             <p class="dash__summary-title">Послуги</p>
             <div class="dash__services" id="dashServices"></div>
           </div>
