@@ -26,7 +26,7 @@ body {
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--text);
   min-height: 100vh;
-  background: top left / cover no-repeat fixed url("../images/bg.jpg");
+  background: linear-gradient(180deg, #dfe7f5, #f2f0f4);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -35,9 +35,16 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Subtle mountain silhouette */
-body::after {
-  content: none;
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: top left / cover no-repeat url("../images/bg.jpg");
+  pointer-events: none;
+  z-index: -1;
 }
 
 .app-shell {
