@@ -52,8 +52,8 @@ const renderSidebar = (activeSlug) => {
   root.innerHTML = `
     <div class="mobile-header">
       <img class="mobile-header__logo" src="images/icons/logo_icon.svg" alt="Nextly">
+      <button class="btn btn--ghost mobile-header__today" type="button" data-dash-range="today">Сьогодні</button>
       <div class="mobile-header__actions">
-        <button class="btn btn--ghost mobile-header__today" type="button" data-dash-range="today">Сьогодні</button>
         <div class="mobile-header__search-field" data-dash-search>
           <input class="mobile-header__search-input" type="text" placeholder="Пошук" aria-label="Пошук" data-dash-search-input>
         </div>
@@ -82,9 +82,36 @@ const renderSidebar = (activeSlug) => {
     </aside>
   `;
 
+  const mobileHeaderBar = root.querySelector(".mobile-header");
+  const mobileLogo = mobileHeaderBar?.querySelector(".mobile-header__logo");
   const mobileSearchField = root.querySelector(".mobile-header__search-field");
   const mobileSearchInput = mobileSearchField?.querySelector("input");
   const mobileSearchToggle = document.getElementById("mobileSearchToggle");
+  const todayMobileButton = root.querySelector(".mobile-header__today");
+  const mobileActions = root.querySelector(".mobile-header__actions");
+  const MAX_SEARCH_WIDTH = 200;
+
+  const setSearchWidth = (value) => {
+    if (!mobileSearchField) return;
+    const raw = typeof value === "number" ? `${value}px` : value;
+    mobileSearchField.style.setProperty("--mobile-header-search-width", raw);
+  };
+
+  const updateMobileSearchWidth = () => {
+    if (!mobileSearchField || !mobileHeaderBar) return;
+    const isOpen = mobileSearchField.classList.contains("is-open");
+    if (!isOpen) {
+      mobileSearchField.style.removeProperty("--mobile-header-search-width");
+      return;
+    }
+
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+    if (viewportWidth <= 450) {
+      setSearchWidth("100%");
+    } else {
+      setSearchWidth(MAX_SEARCH_WIDTH);
+    }
+  };
 
   mobileSearchToggle?.addEventListener("click", () => {
     const isOpen = mobileSearchField?.classList.toggle("is-open");
@@ -93,7 +120,31 @@ const renderSidebar = (activeSlug) => {
     } else {
       mobileSearchInput?.blur();
     }
+    requestAnimationFrame(updateMobileSearchWidth);
   });
+
+  window.addEventListener("resize", () => {
+    if (!mobileSearchField?.classList.contains("is-open")) return;
+    updateMobileSearchWidth();
+  });
+
+  if (mobileSearchField) {
+    const observer = new MutationObserver(() => {
+      requestAnimationFrame(updateMobileSearchWidth);
+    });
+    observer.observe(mobileSearchField, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  mobileSearchInput?.addEventListener("blur", () => {
+    mobileSearchField?.classList.remove("is-open");
+    updateMobileSearchWidth();
+  });
+
+  const onResize = () => {
+    if (!mobileSearchField?.classList.contains("is-open")) return;
+    updateMobileSearchWidth();
+  };
+  window.addEventListener("resize", onResize);
 };
 
 const initSpaNav = () => {
