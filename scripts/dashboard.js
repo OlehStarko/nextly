@@ -166,12 +166,13 @@ const timeToMinutes = (timeStr) => {
   return hours * 60 + minutes;
 };
 
-const buildTimelineSlots = () => {
+const buildTimelineSlots = (endMinutes = TIMELINE_END_HOUR * 60) => {
   const slots = [];
-  for (let hour = TIMELINE_START_HOUR; hour <= TIMELINE_END_HOUR; hour++) {
-    slots.push(`${String(hour).padStart(2, "0")}:00`);
-    if (hour === TIMELINE_END_HOUR) break;
-    slots.push(`${String(hour).padStart(2, "0")}:${String(TIMELINE_STEP_MINUTES).padStart(2, "0")}`);
+  const startMinutes = TIMELINE_START_HOUR * 60;
+  for (let minutes = startMinutes; minutes <= endMinutes; minutes += TIMELINE_STEP_MINUTES) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    slots.push(`${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`);
   }
   return slots;
 };
@@ -470,47 +471,93 @@ const renderDashboardRecords = () => {
 
   if (recordsView === "timeline") {
     list.classList.add("dash-records__list--timeline");
-    const timelineSlots = buildTimelineSlots();
+    let timelineEndMinutes = TIMELINE_END_HOUR * 60;
+    sorted.forEach((rec) => {
+      const service = servicesById.get(rec.serviceId);
+      const durationMinutes = service?.duration || 60;
+      const recordStart = timeToMinutes(rec.time);
+      const recordEnd = recordStart + durationMinutes;
+      if (recordEnd > timelineEndMinutes) {
+        timelineEndMinutes = Math.ceil(recordEnd / TIMELINE_STEP_MINUTES) * TIMELINE_STEP_MINUTES;
+      }
+    });
+    const timelineSlots = buildTimelineSlots(timelineEndMinutes);
     const slotHeight = 32;
     const pxPerMinute = slotHeight / TIMELINE_STEP_MINUTES;
     const timelineHeight = timelineSlots.length * slotHeight;
     const timelineScale = timelineSlots
       .map((time) => `<div class="dash-timeline__scale-item">${time}</div>`)
       .join("");
+    const timelineCardColors = ["#C1DBBC", "#DEDFCA", "#DBC7BC", "#BCC5DB", "#BCDBDB"];
+    let lastTimelineColor = "";
+    const pickTimelineColor = () => {
+      const candidates = timelineCardColors.filter((color) => color !== lastTimelineColor);
+      const choice = candidates[Math.floor(Math.random() * candidates.length)] || timelineCardColors[0];
+      lastTimelineColor = choice;
+      return choice;
+    };
+    let lastElevatedCard = null;
+    const elevateCard = (card) => {
+      if (lastElevatedCard === card) return;
+      lastElevatedCard?.classList.remove("is-raised");
+      card?.classList.add("is-raised");
+      lastElevatedCard = card;
+    };
     const eventsMarkup = sorted
       .map((rec) => {
         const client = clientsById.get(rec.clientId);
         const service = servicesById.get(rec.serviceId);
         const master = mastersById.get(rec.masterId);
         const name = client?.name || "Клієнт";
-        const phone = client?.phone ? `<p class="dash-timeline__phone">${client.phone}</p>` : "";
+        const phone = client?.phone || "—";
         const serviceName = service?.name ? service.name : "—";
         const masterName = master?.name ? master.name : "";
         const amount = (Number(rec.amount) || 0).toFixed(2);
-        const statusClass = `dash-timeline__event dash-timeline__event--${rec.status}`;
-        const timeLabel = showDateTags
-          ? `${formatShortDateLabel(rec.date)} • ${rec.time || "--:--"}`
-          : rec.time || "--:--";
+        const avatar = client?.photo || "images/photo.jpg";
         const startMinutes = timeToMinutes(rec.time) - TIMELINE_START_HOUR * 60;
         const durationMinutes = service?.duration || 60;
         const top = Math.max(0, startMinutes * pxPerMinute);
-        const height = Math.max(pxPerMinute * TIMELINE_STEP_MINUTES, durationMinutes * pxPerMinute);
-        return `
-          <div class="${statusClass}" style="top:${top}px;height:${height}px">
-            <div class="dash-timeline__body">
+        const maxHeight = Math.max(timelineHeight - top, pxPerMinute * TIMELINE_STEP_MINUTES);
+        const height = Math.min(
+          Math.max(pxPerMinute * TIMELINE_STEP_MINUTES, durationMinutes * pxPerMinute),
+          maxHeight
+        );
+        const bgColor = pickTimelineColor();
+        const zIndex = Math.max(1, Math.floor(top) + 1);
+        const cardMarkup = `
+          <article class="dash-records__card dash-records__card--timeline" style="top:${top}px;height:${height}px;background:${bgColor}b3;--timeline-z:${zIndex};">
+            <div class="dash-records__person">
+              <span class="dash-records__avatar">
+                <img src="${avatar}" alt="${name}">
+              </span>
               <h3>${name}</h3>
-              ${phone}
-              <p class="dash-timeline__service">${serviceName}${masterName ? " • " + masterName : ""}</p>
             </div>
-            <div class="dash-timeline__meta">
-              <span class="dash-timeline__time-label">${timeLabel}</span>
-              <span class="dash-timeline__price">₴ ${amount}</span>
+            <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
+            <div class="dash-records__phone">${phone}</div>
+            <div class="dash-records__time">
+              ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
+              <img src="images/icons/clock.svg" alt="" aria-hidden="true">
+              <span>${rec.time || "--:--"}</span>
             </div>
-          </div>
+            <div class="dash-records__price">
+              <img src="images/icons/money.svg" alt="" aria-hidden="true">
+              <span>₴ ${amount}</span>
+            </div>
+            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+          </article>
         `;
+        return cardMarkup;
       })
       .join("");
-    list.innerHTML = `<div class="dash-timeline"><div class="dash-timeline__scale">${timelineScale}</div><div class="dash-timeline__events" style="height:${timelineHeight}px">${eventsMarkup}</div></div>`;
+    list.innerHTML = `<div class="dash-timeline"><div class="dash-timeline__scale"><div class="dash-timeline__scale-inner" style="height:${timelineHeight}px">${timelineScale}</div></div><div class="dash-timeline__events"><div class="dash-timeline__events-inner" style="height:${timelineHeight}px">${eventsMarkup}</div></div></div>`;
+    const timelineContainer = list.querySelector(".dash-timeline");
+    list.querySelectorAll(".dash-records__card--timeline").forEach((card) => {
+      card.addEventListener("click", (event) => {
+        event.stopPropagation();
+        elevateCard(card);
+      });
+    });
+    timelineContainer?.addEventListener("click", () => elevateCard(null));
   } else {
     list.classList.remove("dash-records__list--timeline");
     list.innerHTML = sorted
