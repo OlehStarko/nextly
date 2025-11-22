@@ -87,6 +87,7 @@ const renderSidebar = (activeSlug) => {
   const mobileSearchToggle = document.getElementById("mobileSearchToggle");
   const todayMobileButton = root.querySelector(".mobile-header__today");
   const mobileActions = root.querySelector(".mobile-header__actions");
+  let skipMobileSearchBlur = false;
 
   const updateMobileTodayVisibility = () => {
     if (!todayMobileButton || !mobileSearchField) return;
@@ -96,15 +97,24 @@ const renderSidebar = (activeSlug) => {
     todayMobileButton.classList.toggle("is-hidden", isOpen && isNarrow);
   };
 
-  mobileSearchToggle?.addEventListener("click", () => {
-    const isOpen = mobileSearchField?.classList.toggle("is-open");
-    if (isOpen) {
-      mobileSearchInput?.focus();
-    } else {
-      mobileSearchInput?.blur();
-    }
-    requestAnimationFrame(updateMobileTodayVisibility);
-  });
+  if (mobileSearchToggle && mobileSearchField) {
+    mobileSearchToggle.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      skipMobileSearchBlur = true;
+    });
+    mobileSearchToggle.addEventListener("click", () => {
+      const isOpen = mobileSearchField.classList.contains("is-open");
+      if (isOpen) {
+        mobileSearchField.classList.remove("is-open");
+        mobileSearchInput?.blur();
+      } else {
+        mobileSearchField.classList.add("is-open");
+        mobileSearchInput?.focus();
+      }
+      skipMobileSearchBlur = false;
+      requestAnimationFrame(updateMobileTodayVisibility);
+    });
+  }
 
   window.addEventListener("resize", () => {
     if (!mobileSearchField?.classList.contains("is-open")) return;
@@ -119,6 +129,10 @@ const renderSidebar = (activeSlug) => {
   }
 
   mobileSearchInput?.addEventListener("blur", () => {
+    if (skipMobileSearchBlur) {
+      skipMobileSearchBlur = false;
+      return;
+    }
     mobileSearchField?.classList.remove("is-open");
     updateMobileTodayVisibility();
   });

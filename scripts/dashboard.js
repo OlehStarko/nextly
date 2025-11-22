@@ -210,18 +210,36 @@ const setSearchQuery = (value) => {
 const bindDashSearchControls = () => {
   document.querySelectorAll("[data-dash-search]").forEach((wrap) => {
     if (wrap.dataset.bound === "true") return;
-    const toggle = wrap.querySelector("[data-search-toggle]") || wrap.querySelector("button");
+    let toggle = wrap.querySelector("[data-search-toggle]") || wrap.querySelector("button");
+    // для мобільного хедера кнопка пошуку може бути поза контейнером
+    if (!toggle && wrap.classList.contains("mobile-header__search-field")) {
+      toggle = document.getElementById("mobileSearchToggle");
+    }
+    // у мобільному хедері клацання вже обробляється в menu.js, тому не дублюємо
+    if (wrap.classList.contains("mobile-header__search-field")) {
+      toggle = null;
+    }
     const input = wrap.querySelector("input");
-    if (!toggle || !input) return;
+    if (!input) return;
     input.value = searchQuery;
-    toggle.addEventListener("click", () => {
-      const isOpen = wrap.classList.toggle("is-open");
-      if (isOpen) {
-        input.focus();
-      } else {
-        input.blur();
-      }
-    });
+    let ignoreNextBlur = false;
+    if (toggle) {
+      toggle.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        ignoreNextBlur = true;
+      });
+      toggle.addEventListener("click", () => {
+        const isOpen = wrap.classList.contains("is-open");
+        if (isOpen) {
+          wrap.classList.remove("is-open");
+          input.blur();
+        } else {
+          wrap.classList.add("is-open");
+          input.focus();
+        }
+        ignoreNextBlur = false;
+      });
+    }
     input.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         wrap.classList.remove("is-open");
@@ -229,6 +247,10 @@ const bindDashSearchControls = () => {
       }
     });
     input.addEventListener("blur", () => {
+      if (ignoreNextBlur) {
+        ignoreNextBlur = false;
+        return;
+      }
       wrap.classList.remove("is-open");
     });
     input.addEventListener("input", (event) => setSearchQuery(event.target.value));

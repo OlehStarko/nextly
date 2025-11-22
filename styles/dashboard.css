@@ -89,6 +89,11 @@
   font-size: 14px;
 }
 
+.mobile-header__search-input::placeholder {
+  color: #1b1b1b;
+  opacity: 1;
+}
+
 .mobile-header__search-input:focus,
 .mobile-header__search-input:focus-visible {
   outline: none;
@@ -341,6 +346,11 @@
   transition: width 0.25s ease, opacity 0.2s ease;
 }
 
+.dash__search-input::placeholder {
+  color: #1b1b1b;
+  opacity: 1;
+}
+
 .dash__search.is-open .dash__search-input {
   width: 220px;
   opacity: 1;
@@ -556,7 +566,13 @@
   padding: 24px 0 0;
 }
 
+/* Рівний нижній відступ під таймлайном */
+.dash-timeline {
+  padding-bottom: 24px;
+}
+
 .dash-records__card {
+  box-sizing: border-box;
   min-height:64px;
   height: 64px;
   max-height: 64px;
@@ -564,7 +580,7 @@
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.5);
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1.2fr 1fr 1fr auto;
+  grid-template-columns: 2fr 1.5fr 1fr auto;
   gap: 12px;
   align-items: center;
   backdrop-filter: blur(12px);
@@ -587,13 +603,14 @@
 }
 
 .dash-records__card--timeline {
+  box-sizing: border-box;
   position: absolute;
   left: 6px;
   right: 16px;
   min-height: 64px;
   height: auto;
   max-height: none;
-  grid-template-columns: 2fr 1.5fr 1.2fr 1fr 1fr auto;
+  grid-template-columns: 2fr 1.5fr 1fr auto;
   width: auto;
   border-radius: 0;
   z-index: var(--timeline-z, 1);
@@ -653,11 +670,76 @@
 
 @media (max-width: 900px) {
   .dash-timeline {
-    grid-template-columns: 1fr;
+    grid-template-columns: max-content 1fr;
   }
 
   .dash-records__card--timeline {
     left: 0;
+    right: 0;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "person aside";
+    grid-auto-flow: column;
+    padding: 12px;
+    gap: 12px;
+    align-items: flex-start;
+    height: auto !important;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .dash-timeline__scale {
+    padding: 0;
+    border-radius: 16px 0 0 16px;
+  }
+
+  .dash-timeline__events {
+    padding: 0;
+    border-radius: 0 16px 16px 0;
+  }
+
+  .dash-timeline__scale-inner {
+    padding: 16px 8px 24px 12px;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+  }
+
+  .dash-timeline__events-inner {
+    padding: 16px 8px 24px 0;
+    box-sizing: border-box;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+  }
+
+  /* Ховаємо дублікати полів у таймлайні на мобільному, залишаємо вкладені inline-версії */
+  .dash-records__card--timeline .dash-records__service,
+  .dash-records__card--timeline .dash-records__phone {
+    display: none;
+  }
+
+  .dash-records__card--timeline .dash-records__phone--inline,
+  .dash-records__card--timeline .dash-records__service--inline {
+    display: block;
+    margin: 0;
+    color: #1b1b1b;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .dash-records__card--timeline .dash-records__person {
+    grid-area: person;
+    width: 100%;
+  }
+
+  .dash-records__card--timeline .dash-records__aside {
+    align-items: flex-end;
+    grid-area: aside;
+    width: 100%;
+  }
+
+  .dash-records__card--timeline .dash-records__meta-row {
+    margin-bottom: 12px;
   }
 }
 
@@ -700,13 +782,13 @@
 .dash-records__meta-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 .dash-records__aside {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
 }
 
@@ -753,8 +835,14 @@
     align-items: flex-start;
   }
 
+  .dash-records__info {
+    gap: 6px;
+    align-items: flex-start;
+  }
+
   .dash-records__person h3 {
     font-size: 14px;
+    font-weight: 600;
   }
 
   .dash-records__avatar {
@@ -765,11 +853,12 @@
   .dash-records__aside {
     grid-area: aside;
     align-items: flex-end;
+    flex-direction: column;
   }
 
   .dash-records__meta-row {
     justify-content: flex-start;
-    gap: 10px;
+    gap: 12px;
   }
 
   .dash-records__phone {
@@ -785,6 +874,12 @@
   .dash-records__phone--inline,
   .dash-records__service--inline {
     display: block;
+    margin: 0;
+    color: #1b1b1b;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    width: 100%;
   }
 
   .dash-records__badge {
