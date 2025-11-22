@@ -597,20 +597,28 @@ const renderDashboardRecords = () => {
               <span class="dash-records__avatar">
                 <img src="${avatar}" alt="${name}">
               </span>
-              <h3>${name}</h3>
+              <div class="dash-records__info">
+                <h3>${name}</h3>
+                <p class="dash-records__phone dash-records__phone--inline">${phone}</p>
+                <p class="dash-records__service dash-records__service--inline">${serviceName}${masterName ? " • " + masterName : ""}</p>
+              </div>
             </div>
             <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
             <div class="dash-records__phone">${phone}</div>
-            <div class="dash-records__time">
-              ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
-              <img src="images/icons/clock.svg" alt="" aria-hidden="true">
-              <span>${rec.time || "--:--"}</span>
+            <div class="dash-records__aside">
+              <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+              <div class="dash-records__meta-row">
+                <div class="dash-records__time">
+                  ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
+                  <img src="images/icons/clock.svg" alt="" aria-hidden="true">
+                  <span>${rec.time || "--:--"}</span>
+                </div>
+                <div class="dash-records__price">
+                  <img src="images/icons/money.svg" alt="" aria-hidden="true">
+                  <span>${amount}</span>
+                </div>
+              </div>
             </div>
-            <div class="dash-records__price">
-              <img src="images/icons/money.svg" alt="" aria-hidden="true">
-              <span>₴ ${amount}</span>
-            </div>
-            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
           </article>
         `;
         return cardMarkup;
@@ -644,20 +652,28 @@ const renderDashboardRecords = () => {
               <span class="dash-records__avatar">
                 <img src="${avatar}" alt="${name}">
               </span>
-              <h3>${name}</h3>
+              <div class="dash-records__info">
+                <h3>${name}</h3>
+                <p class="dash-records__phone dash-records__phone--inline">${phone || "—"}</p>
+                <p class="dash-records__service dash-records__service--inline">${serviceName}${masterName ? " • " + masterName : ""}</p>
+              </div>
             </div>
             <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
             <div class="dash-records__phone">${phone || "—"}</div>
-            <div class="dash-records__time">
-              ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
-              <img src="images/icons/clock.svg" alt="" aria-hidden="true">
-              <span>${rec.time || "--:--"}</span>
+            <div class="dash-records__aside">
+              <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+              <div class="dash-records__meta-row">
+                <div class="dash-records__time">
+                  ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
+                  <img src="images/icons/clock.svg" alt="" aria-hidden="true">
+                  <span>${rec.time || "--:--"}</span>
+                </div>
+                <div class="dash-records__price">
+                  <img src="images/icons/money.svg" alt="" aria-hidden="true">
+                  <span>${amount}</span>
+                </div>
+              </div>
             </div>
-            <div class="dash-records__price">
-              <img src="images/icons/money.svg" alt="" aria-hidden="true">
-              <span>₴ ${amount}</span>
-            </div>
-            <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
           </article>
         `;
       })

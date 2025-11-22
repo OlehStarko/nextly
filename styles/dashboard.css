@@ -578,6 +578,14 @@
   min-width: 0;
 }
 
+.dash-records__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  align-items: flex-start;
+}
+
 .dash-records__card--timeline {
   position: absolute;
   left: 6px;
@@ -619,7 +627,7 @@
 .dash-records__person h3 {
   margin: 0;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: #1b1b1b;
 }
 
@@ -689,6 +697,19 @@
   font-weight: 400;
 }
 
+.dash-records__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dash-records__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
 .dash-records__time img,
 .dash-records__price img {
   width: 16px;
@@ -702,15 +723,95 @@
   text-transform: uppercase;
 }
 
+.dash-records__phone--inline,
+.dash-records__service--inline {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .dash-records__card:not(.dash-records__card--timeline) {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "person person aside"
+      "meta meta aside";
     align-items: flex-start;
+    min-height: auto;
+    height: auto;
+    max-height: none;
+    padding: 16px;
+    gap: 12px;
   }
 
   .dash-records__meta {
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+
+  .dash-records__person {
+    grid-area: person;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .dash-records__person h3 {
+    font-size: 14px;
+  }
+
+  .dash-records__avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .dash-records__aside {
+    grid-area: aside;
+    align-items: flex-end;
+  }
+
+  .dash-records__meta-row {
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .dash-records__phone {
+    font-size: 12px;
+    display: none;
+  }
+
+  .dash-records__service {
+    font-size: 12px;
+    display: none;
+  }
+
+  .dash-records__phone--inline,
+  .dash-records__service--inline {
+    display: block;
+  }
+
+  .dash-records__badge {
+    grid-area: badge;
+    align-self: flex-start;
+    height: 24px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .dash-records__badge::before {
+    width: 6px;
+    height: 6px;
+  }
+
+  .dash-records__time,
+  .dash-records__price {
+    font-size: 12px;
+    justify-content: flex-start;
+  }
+
+  .dash-records__time img,
+  .dash-records__price img {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -1083,7 +1184,7 @@
     gap: 16px;
     width: 100%;
     overflow-x: auto;
-    padding: 0 12px;
+    border-radius: 14px;
     scroll-snap-type: x mandatory;
     scroll-padding: 12px;
     -webkit-overflow-scrolling: touch;
@@ -1234,6 +1335,7 @@
   .dash-records__card:not(.dash-records__card--timeline) .dash-records__badge {
     width: 100%;
     justify-content: center;
+    margin-bottom: 7px;
   }
 
   .dash__calendar-wrap {
