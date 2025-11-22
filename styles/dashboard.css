@@ -62,16 +62,17 @@
 }
 
 .mobile-header__search-field {
-  width: 0;
-  flex: 0 0 auto;
+  width: 100%;
+  max-width: 0;
   opacity: 0;
   pointer-events: none;
-  transition: width 0.2s ease, opacity 0.2s ease;
+  transition: max-width 0.2s ease, opacity 0.2s ease;
+  flex: 1 1 clamp(120px, 45vw, 220px);
   min-width: 0;
 }
 
 .mobile-header__search-field.is-open {
-  width: var(--mobile-header-search-width, 200px);
+  max-width: clamp(120px, 55vw, 220px);
   opacity: 1;
   pointer-events: auto;
 }
@@ -230,6 +231,7 @@
 @media (max-width: 900px) {
   .dash__title .hero__title {
     font-size: 18px;
+    display: none; /* ховаємо дату в мобільній версії */
   }
 }
 
@@ -989,12 +991,20 @@
     min-height: auto;
   }
 
+  /* Прибираємо горизонтальні відступи у hero для мобільної версії */
+  .app-shell--dashboard .hero {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .hero--dash {
     gap: 12px;
+    padding-top: 0;
   }
 
   .dash__layout {
     grid-template-columns: 1fr;
+    margin-top: 24px;
   }
 
   .mobile-header {
@@ -1004,7 +1014,7 @@
   }
 
   .dash__showmore {
-    display: inline-flex;
+    display: none;
   }
 
   .sidebar {
@@ -1029,8 +1039,37 @@
   }
 
   .app-shell--dashboard .hero {
-    width: calc(100% - 32px);
+
     margin: 0 auto;
+  }
+
+  /* Календар + перемикач виду у мобільній версії */
+  .dash__crumb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .dash__crumb-btn--picker {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .dash__toggle {
+
+    height: 32px;
+    border-radius: 12px;
+  }
+
+  .dash__toggle-btn {
+    padding: 0 8px;
+  }
+
+  .dash__toggle-btn img {
+    width: 18px;
+    height: 18px;
   }
 
   .sidebar__header {
@@ -1107,12 +1146,22 @@
     display: none;
   }
 
+  .dash__crumb {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
   .dash__controls {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
     margin-left: 0;
+  }
+
+  /* Ховаємо дубльований пошук у тілі дашборду на мобільній версії */
+  .dash__search {
+    display: none;
   }
 
   .dash__search {
@@ -1126,6 +1175,7 @@
 
   .dash__period {
     width: 100%;
+    display: none; /* ховаємо кнопку "День" у мобільній версії */
   }
 
   .dash__layout {
@@ -1152,7 +1202,6 @@
 
   .dash__toggle,
   .dash__chip {
-    width: 100%;
     justify-content: center;
   }
 
@@ -1193,7 +1242,7 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 600px) {
   .dash__calendar-wrap {
     grid-template-columns: 1fr;
   }

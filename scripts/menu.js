@@ -82,35 +82,18 @@ const renderSidebar = (activeSlug) => {
     </aside>
   `;
 
-  const mobileHeaderBar = root.querySelector(".mobile-header");
-  const mobileLogo = mobileHeaderBar?.querySelector(".mobile-header__logo");
   const mobileSearchField = root.querySelector(".mobile-header__search-field");
   const mobileSearchInput = mobileSearchField?.querySelector("input");
   const mobileSearchToggle = document.getElementById("mobileSearchToggle");
   const todayMobileButton = root.querySelector(".mobile-header__today");
   const mobileActions = root.querySelector(".mobile-header__actions");
-  const MAX_SEARCH_WIDTH = 200;
 
-  const setSearchWidth = (value) => {
-    if (!mobileSearchField) return;
-    const raw = typeof value === "number" ? `${value}px` : value;
-    mobileSearchField.style.setProperty("--mobile-header-search-width", raw);
-  };
-
-  const updateMobileSearchWidth = () => {
-    if (!mobileSearchField || !mobileHeaderBar) return;
+  const updateMobileTodayVisibility = () => {
+    if (!todayMobileButton || !mobileSearchField) return;
     const isOpen = mobileSearchField.classList.contains("is-open");
-    if (!isOpen) {
-      mobileSearchField.style.removeProperty("--mobile-header-search-width");
-      return;
-    }
-
-    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
-    if (viewportWidth <= 450) {
-      setSearchWidth("100%");
-    } else {
-      setSearchWidth(MAX_SEARCH_WIDTH);
-    }
+    const isNarrow = window.innerWidth < 450;
+    // Ховаємо кнопку лише на вузьких екранах, коли відкритий пошук
+    todayMobileButton.classList.toggle("is-hidden", isOpen && isNarrow);
   };
 
   mobileSearchToggle?.addEventListener("click", () => {
@@ -120,31 +103,25 @@ const renderSidebar = (activeSlug) => {
     } else {
       mobileSearchInput?.blur();
     }
-    requestAnimationFrame(updateMobileSearchWidth);
+    requestAnimationFrame(updateMobileTodayVisibility);
   });
 
   window.addEventListener("resize", () => {
     if (!mobileSearchField?.classList.contains("is-open")) return;
-    updateMobileSearchWidth();
+    updateMobileTodayVisibility();
   });
 
   if (mobileSearchField) {
     const observer = new MutationObserver(() => {
-      requestAnimationFrame(updateMobileSearchWidth);
+      requestAnimationFrame(updateMobileTodayVisibility);
     });
     observer.observe(mobileSearchField, { attributes: true, attributeFilter: ["class"] });
   }
 
   mobileSearchInput?.addEventListener("blur", () => {
     mobileSearchField?.classList.remove("is-open");
-    updateMobileSearchWidth();
+    updateMobileTodayVisibility();
   });
-
-  const onResize = () => {
-    if (!mobileSearchField?.classList.contains("is-open")) return;
-    updateMobileSearchWidth();
-  };
-  window.addEventListener("resize", onResize);
 };
 
 const initSpaNav = () => {

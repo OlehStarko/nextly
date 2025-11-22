@@ -143,9 +143,30 @@ const initAccountPage = () => {
     setMessage(securityMsg, "Зміна пароля поки не підключена (mock).");
   });
 
-  document.getElementById("logoutAll")?.addEventListener("click", () => {
-    setMessage(securityMsg, "Сесії будуть завершені (mock).");
-  });
+  const clearCookies = () => {
+    const parts = document.cookie.split(";").map((c) => c.trim());
+    parts.forEach((cookie) => {
+      if (!cookie) return;
+      const [name] = cookie.split("=");
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+  };
+
+  const logoutEverywhere = () => {
+    setMessage(securityMsg, "Вихід...");
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+      clearCookies();
+    } catch (err) {
+      // ignore storage errors
+    }
+    window.location.href = "login.html";
+  };
+
+  document.getElementById("logoutAll")?.addEventListener("click", logoutEverywhere);
+  // робимо доступним у консолі на випадок ручного виклику
+  window.logoutEverywhere = logoutEverywhere;
 
   document.getElementById("exportData")?.addEventListener("click", () => {
     exportProfile(profile);

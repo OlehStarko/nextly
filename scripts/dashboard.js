@@ -298,6 +298,14 @@ const renderDashboardRecords = () => {
   const todayButtons = Array.from(document.querySelectorAll('[data-dash-range="today"]'));
   const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
   const monthToggle = document.querySelector("[data-month-toggle]");
+  const crumbRow = document.querySelector(".dash__crumb-row");
+  const titleActions = document.querySelector(".dash__title-actions");
+  const toggleEl = document.querySelector(".dash__toggle");
+  const dashPeriod = document.getElementById("dashPeriod");
+  const dashSummary = document.querySelector(".dash__summary");
+  const dashSummaryHead = dashSummary?.querySelector(".dash__summary-head");
+  const dashSummaryPanel = dashSummary?.querySelector(".dash__summary-panel");
+  const dashControls = document.querySelector(".dash__controls");
   if (!list) return;
 
   const clients = readClients();
@@ -319,6 +327,32 @@ const renderDashboardRecords = () => {
     const targetView = btn.dataset.view || "list";
     btn.classList.toggle("is-active", targetView === recordsView);
   });
+
+  const relocateToggleMobile = () => {
+    if (!toggleEl || !crumbRow || !titleActions) return;
+    if (window.innerWidth <= 900) {
+      if (!crumbRow.contains(toggleEl)) crumbRow.appendChild(toggleEl);
+    } else if (!titleActions.contains(toggleEl)) {
+      titleActions.appendChild(toggleEl);
+    }
+  };
+  relocateToggleMobile();
+
+  const relocatePeriodMobile = () => {
+    if (!dashPeriod || !dashSummary || !dashSummaryHead) return;
+    if (window.innerWidth <= 900) {
+      if (!dashSummary.contains(dashPeriod)) {
+        if (dashSummaryPanel) {
+          dashSummaryPanel.insertAdjacentElement("beforebegin", dashPeriod);
+        } else {
+          dashSummaryHead.insertAdjacentElement("afterend", dashPeriod);
+        }
+      }
+    } else if (dashControls && !dashControls.contains(dashPeriod)) {
+      dashControls.appendChild(dashPeriod);
+    }
+  };
+  relocatePeriodMobile();
 
   const renderDays = () => {
     if (!daysRow) return;
@@ -683,6 +717,10 @@ const renderDashboardRecords = () => {
 
     bindDashSearchControls();
     bindDashPeriodMenu();
+    window.addEventListener("resize", () => {
+      relocateToggleMobile();
+      relocatePeriodMobile();
+    });
     eventsBound = true;
   }
 };
