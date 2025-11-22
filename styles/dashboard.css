@@ -523,6 +523,10 @@
   grid-template-columns: max-content 1fr;
   gap: 0;
   align-items: start;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 24px 16px;
 }
 
 .dash-timeline__scale {
@@ -530,10 +534,9 @@
   font-size: 12px;
   font-weight: 600;
   color: #1b1b1b;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(12px);
-  padding: 24px 0 0 16px;
-  border-radius: 16px 0 0 16px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
 }
 
 .dash-timeline__scale-inner {
@@ -541,6 +544,7 @@
   grid-auto-rows: 32px;
   gap: 0;
   padding-bottom: 24px;
+  position: relative;
 }
 
 .dash-timeline__scale-item {
@@ -560,10 +564,9 @@
 
 .dash-timeline__events {
   position: relative;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(12px);
-  border-radius: 0 16px 16px 0;
-  padding: 24px 0 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
 }
 
 /* Рівний нижній відступ під таймлайном */
@@ -671,6 +674,33 @@
 @media (max-width: 900px) {
   .dash-timeline {
     grid-template-columns: max-content 1fr;
+    padding: 16px 0 24px 12px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+  }
+
+  /* Прибираємо верхній паддинг, щоб top карток збігався з часом */
+  .dash-timeline__scale {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .dash-timeline__events {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .dash-timeline__scale-inner {
+    padding: 16px 8px 24px 0;
+    box-sizing: border-box;
+  }
+
+  .dash-timeline__events-inner {
+    padding: 16px 8px 24px 0;
+    box-sizing: border-box;
   }
 
   .dash-records__card--timeline {
@@ -688,7 +718,7 @@
   }
 
   .dash-timeline__scale {
-    padding: 0;
+  
     border-radius: 16px 0 0 16px;
   }
 
@@ -698,16 +728,13 @@
   }
 
   .dash-timeline__scale-inner {
-    padding: 16px 8px 24px 12px;
+    padding: 0 8px 24px 12px;
     box-sizing: border-box;
-    margin-bottom: 24px;
   }
 
   .dash-timeline__events-inner {
-    padding: 16px 8px 24px 0;
+    padding: 0 8px 24px 0;
     box-sizing: border-box;
-    padding-bottom: 24px;
-    margin-bottom: 24px;
   }
 
   /* Ховаємо дублікати полів у таймлайні на мобільному, залишаємо вкладені inline-версії */
@@ -792,6 +819,13 @@
   gap: 12px;
 }
 
+.dash-records__master {
+  display: none;
+  font-size: 12px;
+  font-weight: 400;
+  color: #1b1b1b;
+}
+
 .dash-records__time img,
 .dash-records__price img {
   width: 16px;
@@ -854,6 +888,8 @@
     grid-area: aside;
     align-items: flex-end;
     flex-direction: column;
+    gap: 10px;
+    width: 100%;
   }
 
   .dash-records__meta-row {
@@ -880,6 +916,15 @@
     font-weight: 400;
     line-height: 1.4;
     width: 100%;
+    text-align: left;
+  }
+
+  .dash-records__master {
+    display: block;
+    align-self: flex-end;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1b1b1b;
   }
 
   .dash-records__badge {
@@ -890,6 +935,7 @@
     border-radius: 8px;
     font-size: 12px;
     gap: 8px;
+    margin-left: auto;
   }
 
   .dash-records__badge::before {
@@ -1430,7 +1476,7 @@
   .dash-records__card:not(.dash-records__card--timeline) .dash-records__badge {
     width: 100%;
     justify-content: center;
-    margin-bottom: 7px;
+   width: 115px;
   }
 
   .dash__calendar-wrap {
@@ -1446,5 +1492,64 @@
 
   .dash__nav {
     display: none;
+  }
+}
+
+/* Примусово мобільні плашки з 900px і нижче */
+@media (max-width: 900px) {
+  .dash-records__list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .dash-records__card:not(.dash-records__card--timeline) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "person aside"
+      "meta aside";
+    align-items: flex-start;
+    height: auto;
+    min-height: 100px;
+    max-height: none;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .dash-records__aside {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .dash-records__meta-row {
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .dash-records__phone,
+  .dash-records__service {
+    display: none;
+  }
+
+  .dash-records__phone--inline,
+  .dash-records__service--inline {
+    display: block;
+    margin: 0;
+    color: #1b1b1b;
+    font-size: 14px;
+    font-weight: 400;
+   
+  }
+
+  .dash-records__badge {
+    width: auto;
+    justify-content: center;
+     width: 115px;
+  }
+
+  .dash-records__master {
+    display: block;
+    align-self: flex-end;
   }
 }

@@ -337,35 +337,56 @@ const renderDashboardRecords = () => {
 
   const openDatePicker = () => {
     if (!dateInput) return;
-    try {
-      if (typeof dateInput.showPicker === "function") {
-        dateInput.showPicker();
-        return;
-      }
-    } catch (e) {
-      // fallback below
-    }
     const prev = {
       pe: dateInput.style.pointerEvents,
       w: dateInput.style.width,
       h: dateInput.style.height,
       pos: dateInput.style.position,
       op: dateInput.style.opacity,
+      left: dateInput.style.left,
+      top: dateInput.style.top,
+      z: dateInput.style.zIndex,
+      vis: dateInput.style.visibility,
     };
-    dateInput.style.pointerEvents = "auto";
-    dateInput.style.width = "1px";
-    dateInput.style.height = "1px";
-    dateInput.style.position = "absolute";
-    dateInput.style.opacity = "0";
-    dateInput.focus();
-    dateInput.click();
-    setTimeout(() => {
+    const tempShow = () => {
+      dateInput.style.pointerEvents = "auto";
+      dateInput.style.width = "200px";
+      dateInput.style.height = "40px";
+      dateInput.style.position = "absolute";
+      dateInput.style.opacity = "0.01";
+      dateInput.style.left = "-9999px";
+      dateInput.style.top = "0";
+      dateInput.style.zIndex = "9999";
+      dateInput.style.visibility = "visible";
+      dateInput.focus({ preventScroll: true });
+    };
+    const restore = () => {
       dateInput.style.pointerEvents = prev.pe;
       dateInput.style.width = prev.w;
       dateInput.style.height = prev.h;
       dateInput.style.position = prev.pos;
       dateInput.style.opacity = prev.op;
-    }, 0);
+      dateInput.style.left = prev.left;
+      dateInput.style.top = prev.top;
+      dateInput.style.zIndex = prev.z;
+      dateInput.style.visibility = prev.vis;
+    };
+
+    tempShow();
+    try {
+      if (typeof dateInput.showPicker === "function") {
+        dateInput.showPicker();
+        setTimeout(restore, 0);
+        return;
+      }
+    } catch (e) {
+      // ignore and fallback
+    }
+
+    requestAnimationFrame(() => {
+      dateInput.click();
+      setTimeout(restore, 0);
+    });
   };
 
   selectedDate = dateInput?.value || selectedDate || todayIso();
@@ -622,13 +643,14 @@ const renderDashboardRecords = () => {
               <div class="dash-records__info">
                 <h3>${name}</h3>
                 <p class="dash-records__phone dash-records__phone--inline">${phone}</p>
-                <p class="dash-records__service dash-records__service--inline">${serviceName}${masterName ? " • " + masterName : ""}</p>
+                <p class="dash-records__service dash-records__service--inline">${serviceName}</p>
               </div>
             </div>
-            <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
+            <div class="dash-records__service">${serviceName}</div>
             <div class="dash-records__phone">${phone}</div>
             <div class="dash-records__aside">
               <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+              ${masterName ? `<div class="dash-records__master">${masterName}</div>` : ""}
               <div class="dash-records__meta-row">
                 <div class="dash-records__time">
                   ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
@@ -677,13 +699,14 @@ const renderDashboardRecords = () => {
               <div class="dash-records__info">
                 <h3>${name}</h3>
                 <p class="dash-records__phone dash-records__phone--inline">${phone || "—"}</p>
-                <p class="dash-records__service dash-records__service--inline">${serviceName}${masterName ? " • " + masterName : ""}</p>
+                <p class="dash-records__service dash-records__service--inline">${serviceName}</p>
               </div>
             </div>
-            <div class="dash-records__service">${serviceName}${masterName ? " • " + masterName : ""}</div>
+            <div class="dash-records__service">${serviceName}</div>
             <div class="dash-records__phone">${phone || "—"}</div>
             <div class="dash-records__aside">
               <span class="dash-records__badge dash-records__badge--${rec.status}">${statusLabels[rec.status] || rec.status}</span>
+              ${masterName ? `<div class="dash-records__master">${masterName}</div>` : ""}
               <div class="dash-records__meta-row">
                 <div class="dash-records__time">
                   ${showDateTags ? `<span class="dash-records__date">${formatShortDateLabel(rec.date)}</span>` : ""}
