@@ -313,6 +313,39 @@ const renderDashboardRecords = () => {
   const masters = readMasters();
   const records = readRecords();
 
+  const openDatePicker = () => {
+    if (!dateInput) return;
+    try {
+      if (typeof dateInput.showPicker === "function") {
+        dateInput.showPicker();
+        return;
+      }
+    } catch (e) {
+      // fallback below
+    }
+    const prev = {
+      pe: dateInput.style.pointerEvents,
+      w: dateInput.style.width,
+      h: dateInput.style.height,
+      pos: dateInput.style.position,
+      op: dateInput.style.opacity,
+    };
+    dateInput.style.pointerEvents = "auto";
+    dateInput.style.width = "1px";
+    dateInput.style.height = "1px";
+    dateInput.style.position = "absolute";
+    dateInput.style.opacity = "0";
+    dateInput.focus();
+    dateInput.click();
+    setTimeout(() => {
+      dateInput.style.pointerEvents = prev.pe;
+      dateInput.style.width = prev.w;
+      dateInput.style.height = prev.h;
+      dateInput.style.position = prev.pos;
+      dateInput.style.opacity = prev.op;
+    }, 0);
+  };
+
   selectedDate = dateInput?.value || selectedDate || todayIso();
   syncSearchInputs();
   const range = getRangeBoundaries(selectedDate, currentPeriod);
@@ -688,13 +721,7 @@ const renderDashboardRecords = () => {
     });
 
     monthToggle?.addEventListener("click", () => {
-      if (!dateInput) return;
-      if (typeof dateInput.showPicker === "function") {
-        dateInput.showPicker();
-      } else {
-        dateInput.focus();
-        dateInput.click();
-      }
+      openDatePicker();
     });
 
     viewButtons.forEach((btn) => {
