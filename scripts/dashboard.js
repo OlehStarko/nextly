@@ -349,13 +349,16 @@ const renderDashboardRecords = () => {
       vis: dateInput.style.visibility,
     };
     const tempShow = () => {
+      const toggleRect = monthToggle?.getBoundingClientRect();
+      const top = toggleRect ? toggleRect.top + window.scrollY : 0;
+      const left = toggleRect ? toggleRect.left + window.scrollX : -9999;
       dateInput.style.pointerEvents = "auto";
       dateInput.style.width = "200px";
       dateInput.style.height = "40px";
       dateInput.style.position = "absolute";
       dateInput.style.opacity = "0.01";
-      dateInput.style.left = "-9999px";
-      dateInput.style.top = "0";
+      dateInput.style.left = `${left}px`;
+      dateInput.style.top = `${top}px`;
       dateInput.style.zIndex = "9999";
       dateInput.style.visibility = "visible";
       dateInput.focus({ preventScroll: true });
